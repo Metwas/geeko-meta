@@ -1,0 +1,18 @@
+{
+       "name": "geeko-meta",
+       "version": "0.0.1",
+       "description": "Geeko metadata library for decorators & dependency injection",
+       "main": "./dist/main.js",
+       "scripts": {
+              "build": "node ./scripts/build/ -n geeko-meta -t tsc -o dist/ -e production",
+              "test": "echo \"Error: no test specified\" && exit 1"
+       },
+       "author": "Metwas",
+       "license": "MIT",
+       "dependencies": {
+              "reflect-metadata": "^0.2.2"
+       },
+       "devDependencies": {
+              "@types/node": "^24.3.0"
+       }
+}

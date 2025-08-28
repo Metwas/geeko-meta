@@ -1,0 +1,11 @@
+/src
+/test
+/scripts
+/environments
+/bin
+/assets
+/node_modules
+.cache
+tsconfig.build.json
+tsconfig.json
+package-lock.json
