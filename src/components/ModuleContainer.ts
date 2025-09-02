@@ -24,8 +24,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import "reflect-metadata";
+import { IModuleWrapper } from "../interfaces/ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export * from "./decorators";
+/**
+ * Strong-typed container for @see IModuleWrapper definitions
+ * 
+ * @public
+ */
+export class ModuleContainer extends Map<string | symbol, IModuleWrapper> { }

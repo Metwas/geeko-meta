@@ -7,4 +7,10 @@ export class Test
        {
 
        }
+
+       @SetMetadata( "prop", { method: "request" } )
+       public request( parma: string ): void
+       {
+
+       }
 }

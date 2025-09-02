@@ -22,10 +22,11 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import "reflect-metadata";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-export * from "./decorators";
+/**
+ * Discovery service search options
+ * 
+ * @public
+ */
+export type DiscoveryScanOptions = {
+       key: string | symbol;
+};
