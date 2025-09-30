@@ -24,44 +24,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { DiscoveryScanOptions } from "../types/DiscoveryScanOptions";
-import { ModuleContainer } from "../components/ModuleContainer";
-import { IModuleWrapper } from "../interfaces/ModuleWrapper";
+import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
+ * Strong-typed container for @see IModuleWrapper definitions
+ * 
  * @public
  */
-export class ModuleRegistryService
-{
-       /**
-        * Global @see ModuleWrapper container
-        * 
-        * @public
-        * @type {ModuleContainer}
-        */
-       public static modules: ModuleContainer = new ModuleContainer();
-
-       /**
-        * @public
-        * @param {DiscoveryScanOptions} options
-        * @returns {Array<IModuleWrapper>}
-        */
-       public getModule( options: DiscoveryScanOptions ): IModuleWrapper
-       {
-              const key: string | symbol = options.key;
-
-              if ( key && ModuleRegistryService.modules.has( key ) )
-              {
-                     const module: IModuleWrapper = ModuleRegistryService.modules.get( key );
-
-                     if ( module )
-                     {
-                            return module;
-                     }
-              }
-
-              return void 0;
-       }
-}
+export class ModuleContainer extends Map<string | symbol, IModuleWrapper<any, any>> { }

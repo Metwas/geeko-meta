@@ -22,15 +22,18 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import { IModuleWrapper } from "../interfaces/ModuleWrapper";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
 /**
- * Strong-typed container for @see IModuleWrapper definitions
+ * Class property injection token
  * 
  * @public
+ * @type {String}
  */
-export class ModuleContainer extends Map<string | symbol, IModuleWrapper> { }
+export const PROPERTY_INJECT_TOKEN: string = "CLASS_PROPERTY_TOKEN";
+
+/**
+ * Contructor or Method parameter injection token
+ * 
+ * @public
+ * @type {String}
+ */
+export const PARAMETER_INJECT_TOKEN: string = "METHOD_PARAMETER_TOKEN";

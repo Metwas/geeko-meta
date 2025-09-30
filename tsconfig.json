@@ -10,7 +10,6 @@
               "declaration": true,
               "emitDecoratorMetadata": true,
               "experimentalDecorators": true,
-              "resolveJsonModule": false,
        },
        "exclude": [
               "node_modules",

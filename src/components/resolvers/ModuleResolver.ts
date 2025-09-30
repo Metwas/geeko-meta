@@ -24,38 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { PARAMETER_INJECT_TOKEN, PROPERTY_INJECT_TOKEN } from "../global/injection/inject.tokens";
-import { InjectionToken } from "../types/tokens";
+
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-/**
- * Injects property or method parameter metadata
- * 
- * @public
- * @param {InjectionToken} token 
- * @returns {PropertyDecorator & ParameterDecorator}
- */
-export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDecorator =>
-{
-       /**
-        * @param {Object} target
-        * @param {String} key
-        * @param {Number} index
-        */
-       return ( target: object, key: string, index?: number ): void =>
-       {
-              if ( !index && key )
-              {
-                     const type: any = target?.constructor;
-                     console.log( "INJECT PROP ", type, key );
-                     /** Method parameter */
-                     Reflect.defineMetadata( PROPERTY_INJECT_TOKEN, { key, token }, type );
-
-                     return void 0;
-              }
-
-              console.log( "INJECT PARAM", target, index );
-              Reflect.defineMetadata( PARAMETER_INJECT_TOKEN, { index, token }, target );
-       };
-}

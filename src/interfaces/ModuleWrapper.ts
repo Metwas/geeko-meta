@@ -24,37 +24,41 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * @public
  */
-export interface IModuleWrapper
+export interface IModuleWrapper<I extends Object, T = Type>
 {
-       dependancies: Array<IModuleWrapper>;
+       dependancies( override?: Array<any> ): Array<IModuleWrapper<any>>;
+       instance( override?: I ): I;
+       target( override?: T ): T;
+       name(): string | undefined;
+       resolve(): I;
+
        useFactory?: Function;
        injectable?: boolean;
-       reference: Object;
-       instance: Object;
-       useValue?: any;
+       useValue?: T;
 }
 
 /**
  * @public
  */
-export class ModuleWrapper implements IModuleWrapper
+export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
 {
        /**
         * Expects a given type @see Object target reference. Optional dependancies will be associated if Injectable 
         * 
         * @public
-        * @param {Object} target 
-        * @param {IModuleWrapper | Array<IModuleWrapper>} dependancies 
+        * @param {ContructorType} target 
+        * @param {IModuleWrapper<any> | Array<IModuleWrapper<any>>} dependancies 
         */
-       public constructor( constructor: any, dependancies?: IModuleWrapper | Array<IModuleWrapper> )
+       public constructor( target: T, dependancies?: IModuleWrapper<any> | Array<IModuleWrapper<any>> )
        {
-              this._constructor = constructor;
+              this._target = target;
 
               if ( dependancies )
               {
@@ -62,33 +66,49 @@ export class ModuleWrapper implements IModuleWrapper
               }
        }
 
-       protected _dependancies: Array<IModuleWrapper> = null;
-       protected _injectable: boolean = false;
-       protected _constructor: Object = null;
-       protected _instance: Object = null;
+       private _dependancies: Array<IModuleWrapper<any>> = void 0;
+       private _instance: I = void 0;
+       private _target: T = void 0;
 
-       public get injectable(): boolean
-       {
-              return this._injectable;
-       }
+       public injectable: boolean = false;
 
-       public get reference(): Object
+       public instance( override?: I ): I
        {
-              return this._constructor;
-       }
+              if ( override )
+              {
+                     this._instance = override;
+              }
 
-       public get instance(): Object
-       {
               return this._instance;
        }
 
-       public set instance( value: any )
+       public target( override?: T ): T
        {
-              this._instance = value;
+              if ( override )
+              {
+                     this._target = override;
+              }
+
+              return this._target;
        }
 
-       public get dependancies(): Array<IModuleWrapper>
+       public name(): string | undefined
        {
+              return ( this._target as any )?.name;
+       }
+
+       public dependancies( override?: Array<any> ): Array<IModuleWrapper<T>>
+       {
+              if ( override )
+              {
+                     this._dependancies = override;
+              }
+
               return this._dependancies;
+       }
+
+       public resolve(): I
+       {
+              return void 0;
        }
 }
