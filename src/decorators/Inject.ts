@@ -48,14 +48,12 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
               if ( !index && key )
               {
                      const type: any = target?.constructor;
-                     console.log( "INJECT PROP ", type, key );
                      /** Method parameter */
                      Reflect.defineMetadata( PROPERTY_INJECT_TOKEN, { key, token }, type );
 
                      return void 0;
               }
 
-              console.log( "INJECT PARAM", target, index );
               Reflect.defineMetadata( PARAMETER_INJECT_TOKEN, { index, token }, target );
        };
 }
