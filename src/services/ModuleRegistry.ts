@@ -25,21 +25,14 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ModuleContainer } from "../components/containers/ModuleContainer";
-import { DiscoveryScanOptions } from "../types/DiscoveryScanOptions";
 import { IModuleWrapper } from "../interfaces/ModuleWrapper";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export class ModuleResolver
-{
-       public resolve<T>( module: IModuleWrapper<T> ): T
-       {
-              return module.instance();
-       }
-}
-
 /**
+ * Global @see IModuleWrapper registry
+ * 
  * @public
  */
 export class ModuleRegistry
@@ -51,9 +44,22 @@ export class ModuleRegistry
         * @type {ModuleContainer}
         */
        private static _injectables: Map<string, Array<string>> = new Map<string, Array<string>>();
-       private static _modules: ModuleContainer = new ModuleContainer();
-       private static _resolver: ModuleResolver = new ModuleResolver();
 
+       /**
+        * Global static @see ModuleContainer - which contains all injectable @see IModuleWrapper instances
+        * 
+        * @private
+        * @type {ModuleContainer}
+        */
+       private static _modules: ModuleContainer = new ModuleContainer();
+
+       /**
+        * Registers the @see IModuleWrapper instance to the global @see ModuleContainer
+        * 
+        * @public
+        * @param {String} key 
+        * @param {IModuleWrapper<I, T>} wrapper 
+        */
        public static register<I, T>( key: string, wrapper: IModuleWrapper<I, T> ): void
        {
               if ( !wrapper )
@@ -72,26 +78,64 @@ export class ModuleRegistry
                      return;
               }
 
-              if ( isArray === false )
+              if ( wrapper.injectable === true )
               {
-                     this._injectables.set( key, [ name ] );
+                     if ( isArray === false )
+                     {
+                            this._injectables.set( key, [ name ] );
+                     }
+                     else
+                     {
+                            existing.push( name );
+                     }
               }
-              else
-              {
-                     existing.push( name );
-              }
+
               console.log( "Register: ", key, name, wrapper );
               this._modules.set( name, wrapper );
        }
 
-       public static resolveFor<T>( token: string, target: T ): T
+       public static resolve<T = new () => void>( target: Type<T> ): T
        {
-              const metadata: any = Reflect.getMetadata( token, target );
+              const name: string = target.name;
 
-              if ( !metadata )
+              if ( typeof name !== "string" || typeof target !== "function" )
               {
                      return void 0;
               }
+
+              const module: IModuleWrapper<T> = this._modules.get( name );
+              /** Singleton behaviour if @see module already has instance assigned */
+              const instance: any = module.instance();
+
+              if ( instance )
+              {
+                     return instance;
+              }
+
+              const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", target );
+              const length: number = dependancies.length;
+              let resolved: Array<any> = [];
+
+              if ( length > 0 )
+              {
+                     /** resolve dependancies first- @TODO Attempt to resolve forwardRef or circular dependancies */
+                     let index: number = 0;
+
+                     for ( ; index < length; ++index )
+                     {
+                            const dependancy: any = this.resolve( dependancies[ index ] );
+                            /** @TODO reject if dependancy was not resolved or default */
+                            if ( dependancy )
+                            {
+                                   resolved.push( dependancy );
+                            }
+                     }
+              }
+
+              const newInstance: any = new target( ...resolved );
+              module.instance( newInstance );
+
+              return newInstance;
        }
 }
 
