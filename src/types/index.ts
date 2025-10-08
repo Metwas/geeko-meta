@@ -22,12 +22,6 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import "reflect-metadata";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-export * from "./services/ModuleRegistry";
-export * from "./decorators";
-export * from "./types";
+export * from "./MetadataOptions";
+export * from "./tokens";
+export * from "./Type";

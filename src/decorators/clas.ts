@@ -9,12 +9,12 @@ class B
 @SetMetadata( "test", 1234 )
 export class Test
 {
-       public constructor( @Inject( "test" ) public b: B )
+       public constructor( @Inject( "b_injectKey" ) public b: B )
        {
 
        }
 
-       @Inject( "pig" )
+       @Inject( "prop" )
        public tester: B;
 
        @SetMetadata( "prop", { method: "request" } )

@@ -24,10 +24,12 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import "reflect-metadata";
+import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
+import { Type } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export * from "./services/ModuleRegistry";
-export * from "./decorators";
-export * from "./types";
+export const wrap = <I, T>( target: Type<T> ): IModuleWrapper<I, T> =>
+{
+       return new ModuleWrapper( target );
+};

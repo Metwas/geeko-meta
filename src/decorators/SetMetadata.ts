@@ -26,6 +26,7 @@
 
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { ModuleRegistry } from "../services/ModuleRegistry";
+import { MetadataOptions } from "../types/MetadataOptions";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -52,30 +53,25 @@ export type CustomDecorator<T = string> = MethodDecorator & ClassDecorator & Cus
  * @param {V} metadataValue
  * @returns {CustomDecorator<T>} 
  */
-export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue: V ): CustomDecorator<K> =>
+export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue: V, options?: MetadataOptions ): CustomDecorator<K> =>
 {
        const factory = <I extends Object, T = Type>( target: any, key?: any, descriptor?: any ): void =>
        {
               /** Method within as class or object will define the @see descriptor */
               if ( descriptor )
               {
-                     const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", target, key );
-                     const constructor: T = target?.constructor;
+                     const constructor: Type<T> = target?.constructor;
 
-                     const wrapper: IModuleWrapper<I, T> = new ModuleWrapper<I, T>( constructor, dependancies );
+                     const wrapper: IModuleWrapper<I, T> = new ModuleWrapper<I, T>( constructor );
+                     wrapper.injectable = options?.injectable;
                      wrapper.useFactory = descriptor.value;
 
                      ModuleRegistry.register( metadataKey as string, wrapper );
-
-                     Reflect.defineMetadata( metadataKey, metadataValue, descriptor.value );
                      return descriptor;
               }
 
-              const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", target );
-              const wrapper: IModuleWrapper<T> = new ModuleWrapper( target, dependancies );
-
+              const wrapper: IModuleWrapper<T> = new ModuleWrapper( target );
               ModuleRegistry.register( metadataKey as string, wrapper );
-              Reflect.defineMetadata( metadataKey, metadataValue, target );
        };
 
        factory.KEY = metadataKey;

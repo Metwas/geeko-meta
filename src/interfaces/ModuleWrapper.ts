@@ -33,9 +33,9 @@ import { Type } from "../types/Type";
  */
 export interface IModuleWrapper<I extends Object, T = Type>
 {
-       dependancies( override?: Array<any> ): Array<IModuleWrapper<any>>;
+       dependancies( override?: Array<T> ): Array<T>;
+       target( override?: Type<T> ): Type<T>;
        instance( override?: I ): I;
-       target( override?: T ): T;
        name(): string | undefined;
        resolve(): I;
 
@@ -50,25 +50,19 @@ export interface IModuleWrapper<I extends Object, T = Type>
 export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
 {
        /**
-        * Expects a given type @see Object target reference. Optional dependancies will be associated if Injectable 
+        * Expects a given type @see Object target reference
         * 
         * @public
-        * @param {ContructorType} target 
-        * @param {IModuleWrapper<any> | Array<IModuleWrapper<any>>} dependancies 
+        * @param {Type<T>} target
         */
-       public constructor( target: T, dependancies?: IModuleWrapper<any> | Array<IModuleWrapper<any>> )
+       public constructor( target: Type<T> )
        {
               this._target = target;
-
-              if ( dependancies )
-              {
-                     this._dependancies = Array.isArray( dependancies ) ? dependancies : [ dependancies ];
-              }
        }
 
-       private _dependancies: Array<IModuleWrapper<any>> = void 0;
+       private _dependancies: Array<T> = void 0;
+       private _target: Type<T> = void 0;
        private _instance: I = void 0;
-       private _target: T = void 0;
 
        public injectable: boolean = false;
 
@@ -82,7 +76,7 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
               return this._instance;
        }
 
-       public target( override?: T ): T
+       public target( override?: Type<T> ): Type<T>
        {
               if ( override )
               {
@@ -94,10 +88,10 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
 
        public name(): string | undefined
        {
-              return ( this._target as any )?.name;
+              return this._target?.name;
        }
 
-       public dependancies( override?: Array<any> ): Array<IModuleWrapper<T>>
+       public dependancies( override?: Array<T> ): Array<T>
        {
               if ( override )
               {
