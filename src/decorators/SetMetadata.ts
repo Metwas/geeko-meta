@@ -25,7 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
-import { ModuleRegistry } from "../services/ModuleRegistry";
+import { ModuleRegistry } from "../components/registry/ModuleRegistry";
 import { MetadataOptions } from "../types/MetadataOptions";
 import { Type } from "../types/Type";
 

@@ -28,6 +28,6 @@ import "reflect-metadata";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export * from "./services/ModuleRegistry";
+export * from "./components/registry/ModuleRegistry";
 export * from "./decorators";
 export * from "./types";
