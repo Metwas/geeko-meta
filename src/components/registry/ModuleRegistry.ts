@@ -90,7 +90,6 @@ export class ModuleRegistry
                      }
               }
 
-              console.log( "Register: ", key, name, wrapper );
               this._modules.set( name, wrapper );
        }
 
@@ -103,6 +102,7 @@ export class ModuleRegistry
         */
        public static resolve<T = new () => void>( target: Type<T> ): T
        {
+              /**@TODO: get name from override options or default to @see Type<T>.name  */
               const name: string = target.name;
 
               if ( typeof name !== "string" || typeof target !== "function" )
@@ -111,6 +111,12 @@ export class ModuleRegistry
               }
 
               const module: IModuleWrapper<T> = this._modules.get( name );
+
+              if ( !module )
+              {
+                     return void 0;
+              }
+
               /** Singleton behaviour if @see module already has instance assigned */
               const instance: any = module.instance();
 
@@ -130,6 +136,7 @@ export class ModuleRegistry
 
                      for ( ; index < length; ++index )
                      {
+                            console.log( dependancies[ index ] );
                             const dependancy: any = this.resolve( dependancies[ index ] );
                             /** @TODO reject if dependancy was not resolved or default */
                             if ( dependancy )
