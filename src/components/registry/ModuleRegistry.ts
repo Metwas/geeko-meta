@@ -126,7 +126,7 @@ export class ModuleRegistry
               }
 
               const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", target );
-              const length: number = dependancies.length;
+              const length: number = dependancies?.length ?? 0;
               let resolved: Array<any> = [];
 
               if ( length > 0 )
