@@ -38,6 +38,14 @@ import { Type } from "../../types/Type";
 export class ModuleRegistry
 {
        /**
+        * Flag to throw @see Error if the dependancies are not resolved/injected
+        * 
+        * @public
+        * @type {Boolean}
+        */
+       public static throwUninjectableDependancies: boolean = false;
+
+       /**
         * Global @see ModuleWrapper container
         * 
         * @public
@@ -136,13 +144,19 @@ export class ModuleRegistry
 
                      for ( ; index < length; ++index )
                      {
-                            console.log( dependancies[ index ] );
                             const dependancy: any = this.resolve( dependancies[ index ] );
                             /** @TODO reject if dependancy was not resolved or default */
-                            if ( dependancy )
+                            if ( !dependancy )
                             {
-                                   resolved.push( dependancy );
+                                   if ( ModuleRegistry.throwUninjectableDependancies === true )
+                                   {
+                                          throw new Error( `Unable to resolve dependancy [${dependancies[ index ]}] at index [${index}]` );
+                                   }
+
+                                   continue;
                             }
+
+                            resolved.push( dependancy );
                      }
               }
 
