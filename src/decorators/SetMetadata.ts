@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { ModuleRegistry } from "../components/registry/ModuleRegistry";
 import { MetadataOptions } from "../types/MetadataOptions";
@@ -32,25 +33,12 @@ import { Type } from "../types/Type";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @public
- */
-export type CustomTrackDecorator<T> = {
-       KEY: T;
-};
-
-/**
- * Method/Function & Class decorator strong-type
- * 
- * @public
- */
-export type CustomDecorator<T = string> = MethodDecorator & ClassDecorator & CustomTrackDecorator<T>;
-
-/**
  * Sets metadata on a given class OR function.
  * 
  * @public
  * @param {T} metadataKey 
  * @param {V} metadataValue
+ * @param {MetadataOptions} options
  * @returns {CustomDecorator<T>} 
  */
 export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue: V, options?: MetadataOptions ): CustomDecorator<K> =>
