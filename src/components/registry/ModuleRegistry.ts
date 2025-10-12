@@ -26,6 +26,7 @@
 
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
+import { InjectionToken } from "../../types";
 import { Type } from "../../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -44,6 +45,14 @@ export class ModuleRegistry
         * @type {Boolean}
         */
        public static throwUninjectableDependancies: boolean = false;
+
+       /**
+        * Singleton behaviour flag to indicate only one @see Type<T> instance can exist within this @see ModuleRegistry
+        * 
+        * @public
+        * @type {Boolean}
+        */
+       public static singletonBehaviour: boolean = true;
 
        /**
         * Global @see ModuleWrapper container
@@ -78,7 +87,7 @@ export class ModuleRegistry
               /** Key is the Injector token */
               const existing: Array<string> = this._injectables.get( key );
               let isArray: boolean = Array.isArray( existing );
-              let name: string = wrapper.name();
+              let name: InjectionToken = wrapper.name();
 
               if ( name && isArray && existing.indexOf( name ) > -1 )
               {
@@ -128,7 +137,7 @@ export class ModuleRegistry
               /** Singleton behaviour if @see module already has instance assigned */
               const instance: any = module.instance();
 
-              if ( instance )
+              if ( instance && ModuleRegistry.singletonBehaviour === true )
               {
                      return instance;
               }
