@@ -169,10 +169,17 @@ export class ModuleRegistry
                      }
               }
 
-              const newInstance: any = new target( ...resolved );
-              module.instance( newInstance );
+              if ( module.useValue )
+              {
+                     return module.instance( module.useValue );
+              }
 
-              return newInstance;
+              if ( typeof module.useFactory === "function" )
+              {
+                     return module.instance( module.useFactory() );
+              }
+
+              return module.instance( new target( ...resolved ) );
        }
 }
 

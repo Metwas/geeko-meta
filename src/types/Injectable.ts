@@ -35,5 +35,7 @@ export type InjectionToken = string;
  * @public
  */
 export type InjectableOptions = {
+       useFactory?: ( ...args: Array<any> ) => any;
        token?: InjectionToken;
+       useValue?: any;
 };

@@ -59,6 +59,16 @@ export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue:
               }
 
               const wrapper: IModuleWrapper<T> = new ModuleWrapper( target, options );
+
+              if ( options?.useValue )
+              {
+                     wrapper.useValue = options?.useValue;
+              }
+              else if ( typeof options?.useFactory === "function" )
+              {
+                     wrapper.useFactory = options?.useFactory;
+              }
+
               ModuleRegistry.register( metadataKey as string, wrapper );
        };
 
