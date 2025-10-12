@@ -36,7 +36,7 @@ export class Test
        @SetMetadata( "prop", { method: "request" } )
        public request( parma: string ): void
        {
-              console.log( this.b.hello() );
-              console.log( this.c.hello() );
+              console.log( this.b?.hello() );
+              console.log( this.c?.hello() );
        }
 }

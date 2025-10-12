@@ -25,7 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { PARAMETER_INJECT_TOKEN, PROPERTY_INJECT_TOKEN } from "../global/injection/inject.tokens";
-import { InjectionToken } from "../types/tokens";
+import { InjectionToken } from "../types//Injectable";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

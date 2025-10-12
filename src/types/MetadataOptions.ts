@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectionToken } from "./tokens";
+import { InjectableOptions } from "./Injectable";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -33,7 +33,6 @@ import { InjectionToken } from "./tokens";
  * 
  * @public
  */
-export type MetadataOptions = {
-       token?: InjectionToken;
+export type MetadataOptions = InjectableOptions & {
        injectable?: boolean;
 };

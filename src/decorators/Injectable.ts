@@ -25,9 +25,10 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { InjectionToken, MetadataOptions } from "../types";
+import { InjectableOptions } from "../types/Injectable";
 import { CustomDecorator } from "../types/Decorators";
 import { SetMetadata } from "./SetMetadata";
+import { MetadataOptions } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -39,12 +40,12 @@ import { SetMetadata } from "./SetMetadata";
  * @param {MetadataOptions} options
  * @returns {CustomDecorator<T>} 
  */
-export const Injectable = ( token?: InjectionToken ): CustomDecorator =>
+export const Injectable = ( options?: InjectableOptions ): CustomDecorator =>
 {
-       let options: MetadataOptions = {
+       let metadata: MetadataOptions = {
+              token: options?.token,
               injectable: true,
-              token: token
        };
 
-       return SetMetadata( INJECTABLE_TOKEN_KEY, true, options );
+       return SetMetadata( INJECTABLE_TOKEN_KEY, true, metadata );
 };

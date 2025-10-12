@@ -27,4 +27,13 @@
  * 
  * @public
  */
-export type InjectionToken = string | symbol
+export type InjectionToken = string | symbol;
+
+/**
+ * @see Injectable options
+ * 
+ * @public
+ */
+export type InjectableOptions = {
+       token?: InjectionToken;
+};

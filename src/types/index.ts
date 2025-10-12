@@ -23,5 +23,6 @@
 */
 
 export * from "./MetadataOptions";
-export * from "./tokens";
+export * from "./Injectable";
+export * from "./Decorators";
 export * from "./Type";
