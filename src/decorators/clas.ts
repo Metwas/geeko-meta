@@ -1,15 +1,31 @@
-import { Inject } from "./Inject";
 import { SetMetadata } from "./SetMetadata";
+import { Injectable } from "./Injectable";
+import { Inject } from "./Inject";
 
+@Injectable()
 class B
 {
-
+       public hello()
+       {
+              return "Hello from B";
+       }
 }
 
-@SetMetadata( "test", 1234 )
+@Injectable()
+class C
+{
+       public constructor( public b: B ) { }
+
+       public hello()
+       {
+              return "Hello from C";
+       }
+}
+
+@Injectable()
 export class Test
 {
-       public constructor( @Inject( "b_injectKey" ) public b: B )
+       public constructor( @Inject( "b_injectKey" ) public b: B, public c: C )
        {
 
        }
@@ -20,6 +36,7 @@ export class Test
        @SetMetadata( "prop", { method: "request" } )
        public request( parma: string ): void
        {
-
+              console.log( this.b.hello() );
+              console.log( this.c.hello() );
        }
 }
