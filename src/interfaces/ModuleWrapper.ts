@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { InjectableOptions, InjectionToken } from "../types";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -36,7 +37,7 @@ export interface IModuleWrapper<I extends Object, T = Type>
        dependancies( override?: Array<T> ): Array<T>;
        target( override?: Type<T> ): Type<T>;
        instance( override?: I ): I;
-       name(): string | undefined;
+       name(): InjectionToken | undefined;
        resolve(): I;
 
        useFactory?: Function;
@@ -54,13 +55,16 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
         * 
         * @public
         * @param {Type<T>} target
+        * @param {InjectableOptions} options
         */
-       public constructor( target: Type<T> )
+       public constructor( target: Type<T>, options?: InjectableOptions )
        {
               this._target = target;
+              this._token = options?.token;
        }
 
        private _dependancies: Array<T> = void 0;
+       private _token: InjectionToken = void 0;
        private _target: Type<T> = void 0;
        private _instance: I = void 0;
 
@@ -86,9 +90,9 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
               return this._target;
        }
 
-       public name(): string | undefined
+       public name(): InjectionToken | undefined
        {
-              return this._target?.name;
+              return this._token ?? this._target?.name;
        }
 
        public dependancies( override?: Array<T> ): Array<T>

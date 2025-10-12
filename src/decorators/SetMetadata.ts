@@ -50,7 +50,7 @@ export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue:
               {
                      const constructor: Type<T> = target?.constructor;
 
-                     const wrapper: IModuleWrapper<I, T> = new ModuleWrapper<I, T>( constructor );
+                     const wrapper: IModuleWrapper<I, T> = new ModuleWrapper<I, T>( constructor, options );
                      wrapper.injectable = options?.injectable;
                      wrapper.useFactory = descriptor.value;
 
@@ -58,7 +58,7 @@ export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue:
                      return descriptor;
               }
 
-              const wrapper: IModuleWrapper<T> = new ModuleWrapper( target );
+              const wrapper: IModuleWrapper<T> = new ModuleWrapper( target, options );
               ModuleRegistry.register( metadataKey as string, wrapper );
        };
 

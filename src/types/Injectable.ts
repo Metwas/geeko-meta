@@ -27,7 +27,7 @@
  * 
  * @public
  */
-export type InjectionToken = string | symbol;
+export type InjectionToken = string;
 
 /**
  * @see Injectable options
