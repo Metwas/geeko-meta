@@ -36,16 +36,14 @@ import { MetadataOptions } from "../types";
  * Sets a @see ClassDecorator to injectable.
  * 
  * @public
- * @param {InjectionToken} token 
- * @param {MetadataOptions} options
+ * @param {InjectableOptions} options
  * @returns {CustomDecorator<T>} 
  */
 export const Injectable = ( options?: InjectableOptions ): CustomDecorator =>
 {
-       let metadata: MetadataOptions = {
-              token: options?.token,
+       let metadata: MetadataOptions = Object.assign( options ?? {}, {
               injectable: true,
-       };
+       } );
 
        return SetMetadata( INJECTABLE_TOKEN_KEY, true, metadata );
 };
