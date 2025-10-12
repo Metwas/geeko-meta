@@ -37,3 +37,11 @@ export const PROPERTY_INJECT_TOKEN: string = "CLASS_PROPERTY_TOKEN";
  * @type {String}
  */
 export const PARAMETER_INJECT_TOKEN: string = "METHOD_PARAMETER_TOKEN";
+
+/**
+ * @see Injectable metadata token key
+ * 
+ * @public
+ * @type {String} 
+ */
+export const INJECTABLE_TOKEN_KEY: string = "INJECTABLE_TOKEN_KEY";
