@@ -22,11 +22,18 @@
      SOFTWARE.
 */
 
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+import { InjectionToken } from "./tokens";
+
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
 /**
  * @see SetMetadata options
  * 
  * @public
  */
 export type MetadataOptions = {
+       token?: InjectionToken;
        injectable?: boolean;
 };
