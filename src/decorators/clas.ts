@@ -2,6 +2,12 @@ import { SetMetadata } from "./SetMetadata";
 import { Injectable } from "./Injectable";
 import { Inject } from "./Inject";
 
+@Injectable( "Injected_D" )
+class D
+{
+       public name: string = "D";
+}
+
 @Injectable()
 class B
 {
@@ -30,8 +36,8 @@ export class Test
 
        }
 
-       @Inject( "prop" )
-       public tester: B;
+       @Inject( "Injected_D" )
+       public tester: D;
 
        @SetMetadata( "prop", { method: "request" } )
        public request( parma: string ): void
