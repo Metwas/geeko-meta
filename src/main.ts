@@ -29,5 +29,6 @@ import "reflect-metadata";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 export * from "./components/registry/ModuleRegistry";
+export * from "./interfaces/ModuleWrapper";
 export * from "./decorators";
 export * from "./types";
