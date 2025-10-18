@@ -24,26 +24,19 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { InjectableOptions } from "../types/Injectable";
-import { CustomDecorator } from "../types/Decorators";
-import { SetMetadata } from "./SetMetadata";
-import { MetadataOptions } from "../types";
+import { InjectionToken } from "./Injectable";
+import { Type } from "./Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Sets a @see ClassDecorator to injectable.
+ * @see Inject property map
  * 
  * @public
- * @param {InjectableOptions | String} options
- * @returns {CustomDecorator<T>} 
  */
-export const Injectable = ( options?: string | InjectableOptions ): CustomDecorator =>
-{
-       let metadata: MetadataOptions = Object.assign( typeof options === "string" ? { token: options } : ( options ?? {} ), {
-              injectable: true,
-       } );
-
-       return SetMetadata( INJECTABLE_TOKEN_KEY, true, metadata );
+export type PropertyMap<T> = {
+       token: InjectionToken;
+       key?: InjectionToken;
+       target: Type<T>;
+       index?: number;
 };

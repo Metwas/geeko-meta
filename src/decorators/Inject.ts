@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { PARAMETER_INJECT_TOKEN, PROPERTY_INJECT_TOKEN } from "../global/injection/inject.tokens";
+import { ModuleRegistry } from "../components/registry/ModuleRegistry";
 import { InjectionToken } from "../types//Injectable";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -49,17 +49,19 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
               {
                      const type: any = target?.constructor;
                      /** Method parameter */
-                     Reflect.defineMetadata( PROPERTY_INJECT_TOKEN, {
+                     ModuleRegistry.registryProperty( {
+                            target: type,
                             token: token,
-                            key: key
-                     }, type );
+                            key: key,
+                     } );
 
                      return void 0;
               }
 
-              Reflect.defineMetadata( PARAMETER_INJECT_TOKEN, {
-                     index: index,
-                     token: token
-              }, target );
+              ModuleRegistry.registryProperty( {
+                     target: target as any,
+                     token: token,
+                     index: index
+              } );
        };
 }

@@ -24,9 +24,10 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { InjectableOptions, InjectionToken } from "../../types";
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
-import { InjectionToken } from "../../types";
+import { PropertyMap } from "../../types/PropertyMap";
 import { Type } from "../../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -71,6 +72,14 @@ export class ModuleRegistry
        private static _modules: ModuleContainer = new ModuleContainer();
 
        /**
+        * @see Inject property graph
+        * 
+        * @private
+        * @type {Map<InjectionToken, Array<PropertyMap>>}
+        */
+       private static _propertyGraph: Map<InjectionToken, Array<PropertyMap<any>>> = new Map<InjectionToken, Array<PropertyMap<any>>>();
+
+       /**
         * Registers the @see IModuleWrapper instance to the global @see ModuleContainer
         * 
         * @public
@@ -111,16 +120,41 @@ export class ModuleRegistry
        }
 
        /**
+        * Registers @see Inject properties for a given @see Type<T> target
+        * 
+        * @public
+        * @param {PropertyMap} property 
+        */
+       public static registryProperty<T>( property: PropertyMap<T> ): void
+       {
+              if ( !property?.target?.name || !property.token )
+              {
+                     return void 0;
+              }
+
+              const name: string = property.target.name;
+              const existing: Array<PropertyMap<T>> = this._propertyGraph.get( name );
+
+              if ( !existing )
+              {
+                     this._propertyGraph.set( name, [ property ] );
+                     return void 0;
+              }
+
+              existing.push( property );
+       }
+
+       /**
         * Attempts to resolve the instance of the given @see Type<T> target
         * 
         * @public
-        * @param {Type<T>} target 
+        * @param {Type<T>} target
+        * @param {InjectableOptions} options
         * @returns {T}
         */
-       public static resolve<T = new () => void>( target: Type<T> ): T
+       public static resolve<T = new () => void>( target: Type<T>, options?: InjectableOptions ): T
        {
-              /**@TODO: get name from override options or default to @see Type<T>.name  */
-              const name: string = target.name;
+              const name: string = options?.token ?? target?.name;
 
               if ( typeof name !== "string" || typeof target !== "function" )
               {
@@ -134,15 +168,18 @@ export class ModuleRegistry
                      return void 0;
               }
 
-              /** Singleton behaviour if @see module already has instance assigned */
-              const instance: any = module.instance();
+              const mtarget: Type<T> = module.target() as Type<T>;
+              let instance: any = module.instance();
 
+              /** Singleton behaviour if @see module already has instance assigned */
               if ( instance && ModuleRegistry.singletonBehaviour === true )
               {
                      return instance;
               }
 
-              const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", target );
+              const propertyMap: Array<PropertyMap<T>> = this._propertyGraph.get( mtarget.name );
+              const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", mtarget );
+              const plength: number = propertyMap?.length ?? 0;
               const length: number = dependancies?.length ?? 0;
               let resolved: Array<any> = [];
 
@@ -153,16 +190,45 @@ export class ModuleRegistry
 
                      for ( ; index < length; ++index )
                      {
-                            const dependancy: any = this.resolve( dependancies[ index ] );
+                            const type: Type<T> = dependancies[ index ];
+                            let isInjected: boolean = false;
+                            let _resolved: T = void 0;
+
+                            for ( let i = 0; i < plength; ++i )
+                            {
+                                   const map: PropertyMap<T> = propertyMap[ i ];
+
+                                   if ( map?.index === index )
+                                   {
+                                          isInjected = true;
+                                          /** Fetch dependancy based on injected token */
+                                          _resolved = this.resolve( map.target, {
+                                                 token: map.token
+                                          } );
+
+                                          break;
+                                   }
+                            }
+
+                            let dependancy: T = void 0;
+
+                            if ( isInjected )
+                            {
+                                   /** Fetch custom Injected  */
+                                   dependancy = _resolved;
+                            }
+                            else
+                            {
+                                   dependancy = this.resolve( type );
+                            }
+
                             /** @TODO reject if dependancy was not resolved or default */
-                            if ( !dependancy )
+                            if ( !dependancy || ( isInjected && !_resolved ) )
                             {
                                    if ( ModuleRegistry.throwUninjectableDependancies === true )
                                    {
                                           throw new Error( `Unable to resolve dependancy [${dependancies[ index ]}] at index [${index}]` );
                                    }
-
-                                   continue;
                             }
 
                             resolved.push( dependancy );
@@ -171,15 +237,41 @@ export class ModuleRegistry
 
               if ( module.useValue )
               {
-                     return module.instance( module.useValue );
+                     instance = module.useValue;
               }
-
-              if ( typeof module.useFactory === "function" )
+              else if ( typeof module.useFactory === "function" )
               {
-                     return module.instance( module.useFactory() );
+                     instance = module.useFactory();
+              }
+              else
+              {
+                     instance = new mtarget( ...resolved );
               }
 
-              return module.instance( new target( ...resolved ) );
+              /** Resolve @see target injected properties */
+              let pindex: number = 0;
+
+              for ( ; pindex < plength; ++pindex )
+              {
+                     const property: PropertyMap<T> = propertyMap[ pindex ];
+
+                     /** Only resolve property.key */
+                     if ( typeof property.key === "string" )
+                     {
+                            const resolved: any = this.resolve( property.target, {
+                                   token: property.token
+                            } );
+
+                            if ( !resolved )
+                            {
+                                   continue;
+                            }
+
+                            instance[ property.key ] = resolved;
+                     }
+              }
+
+              return module.instance( instance );
        }
 }
 
