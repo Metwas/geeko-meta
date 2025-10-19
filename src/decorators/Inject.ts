@@ -25,7 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ModuleRegistry } from "../components/registry/ModuleRegistry";
-import { InjectionToken } from "../types//Injectable";
+import { InjectionToken } from "../types/Injectable";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
