@@ -275,7 +275,7 @@ export class ModuleRegistry
               return module.instance( instance );
        }
 
-       public resolveContext( context: ModuleContext ): any
+       public static resolveContext( context: ModuleContext ): any
        {
               /** @TODO: implement  */
               return void 0;
