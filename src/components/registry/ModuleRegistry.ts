@@ -28,6 +28,7 @@ import { InjectableOptions, InjectionToken } from "../../types";
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
 import { PropertyMap } from "../../types/PropertyMap";
+import { ModuleContext } from "../../types/Context";
 import { Type } from "../../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -272,6 +273,12 @@ export class ModuleRegistry
               }
 
               return module.instance( instance );
+       }
+
+       public resolveContext( context: ModuleContext ): any
+       {
+              /** @TODO: implement  */
+              return void 0;
        }
 }
 
