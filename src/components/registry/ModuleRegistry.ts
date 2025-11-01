@@ -164,7 +164,7 @@ export class ModuleRegistry
 
               const module: IModuleWrapper<T> = this._modules.get( name );
 
-              if ( !module )
+              if ( !module || module.injectable === false )
               {
                      return void 0;
               }
@@ -215,7 +215,7 @@ export class ModuleRegistry
 
                             if ( isInjected )
                             {
-                                   /** Fetch custom Injected  */
+                                   /** Resolve custom module referenced by @see Inject */
                                    dependancy = _resolved;
                             }
                             else
@@ -223,7 +223,6 @@ export class ModuleRegistry
                                    dependancy = this.resolve( type );
                             }
 
-                            /** @TODO reject if dependancy was not resolved or default */
                             if ( !dependancy || ( isInjected && !_resolved ) )
                             {
                                    if ( ModuleRegistry.throwUninjectableDependancies === true )
@@ -275,6 +274,11 @@ export class ModuleRegistry
               return module.instance( instance );
        }
 
+       /**
+        * @public
+        * @param {ModuleContext} context 
+        * @returns {ApplicationContext}
+        */
        public static resolveContext( context: ModuleContext ): any
        {
               /** @TODO: implement  */
