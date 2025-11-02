@@ -25,13 +25,30 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
-import { InjectionToken } from "../../types";
+import { ModuleContainer } from "./ModuleContainer";
+import { InjectionToken, Type } from "../../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-/**
- * Strong-typed container for @see IModuleWrapper definitions
- * 
- * @public
- */
-export class ModuleContainer extends Map<InjectionToken, IModuleWrapper<any, any>> { }
+export class ApplicationContext
+{
+       public constructor( public readonly modules: ModuleContainer )
+       {
+              if ( !modules )
+              {
+                     this.modules = new ModuleContainer();
+              }
+       }
+
+       /**
+        * 
+        * 
+        * @public 
+        * @param {InjectionToken} target 
+        * @returns {T}
+        */
+       public get<T>( target: InjectionToken | Type<T> ): T
+       {
+              return void 0;
+       }
+}

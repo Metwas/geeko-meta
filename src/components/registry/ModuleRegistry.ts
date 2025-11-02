@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { ApplicationContext } from "../containers/ApplicationContext";
 import { InjectableOptions, InjectionToken } from "../../types";
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
@@ -57,12 +58,12 @@ export class ModuleRegistry
        public static singletonBehaviour: boolean = true;
 
        /**
-        * Global @see ModuleWrapper container
+        * Used to track injectables via the decorator ID
         * 
         * @public
-        * @type {ModuleContainer}
+        * @type {Map<string, Array<InjectionToken>>}
         */
-       private static _injectables: Map<string, Array<string>> = new Map<string, Array<string>>();
+       private static _injectables: Map<string, Array<InjectionToken>> = new Map<string, Array<InjectionToken>>();
 
        /**
         * Global static @see ModuleContainer - which contains all injectable @see IModuleWrapper instances
@@ -95,7 +96,7 @@ export class ModuleRegistry
               }
 
               /** Key is the Injector token */
-              const existing: Array<string> = this._injectables.get( key );
+              const existing: Array<InjectionToken> = this._injectables.get( key );
               let isArray: boolean = Array.isArray( existing );
               let name: InjectionToken = wrapper.name();
 
@@ -275,14 +276,14 @@ export class ModuleRegistry
        }
 
        /**
-        * @public
+        * 
         * @param {ModuleContext} context 
         * @returns {ApplicationContext}
         */
-       public static resolveContext( context: ModuleContext ): any
+       public static resolveContext( context: ModuleContext ): ApplicationContext
        {
               /** @TODO: implement  */
-              return void 0;
+              return new ApplicationContext( void 0 );
        }
 }
 
