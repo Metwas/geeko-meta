@@ -24,14 +24,39 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
-import { ModuleContainer } from "./ModuleContainer";
-import { InjectionToken, Type } from "../../types";
+import { ModuleContainer } from "../components/containers/ModuleContainer";
+import { InjectionToken, Type } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export class ApplicationContext
+/**
+ * @public
+ */
+export interface IApplicationContext
 {
+       /**
+        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
+        * 
+        * @public 
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {T}
+        */
+       get<T>( target: InjectionToken | Type<T> ): T;
+}
+
+/**
+ * Default @see IApplicationContext implementation
+ * 
+ * @public
+ */
+export class ApplicationContext implements IApplicationContext
+{
+       /**
+        * Expects a Module collection based from @see ModuleContainer
+        * 
+        * @public
+        * @param {ModuleContainer} modules 
+        */
        public constructor( public readonly modules: ModuleContainer )
        {
               if ( !modules )
@@ -41,10 +66,10 @@ export class ApplicationContext
        }
 
        /**
-        * 
+        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
         * 
         * @public 
-        * @param {InjectionToken} target 
+        * @param {InjectionToken | Type<T>} target 
         * @returns {T}
         */
        public get<T>( target: InjectionToken | Type<T> ): T

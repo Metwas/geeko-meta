@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ApplicationContext } from "../containers/ApplicationContext";
+import { ApplicationContext, IApplicationContext } from "../../interfaces/ApplicationContext";
 import { InjectableOptions, InjectionToken } from "../../types";
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
@@ -39,7 +39,7 @@ import { Type } from "../../types/Type";
  * 
  * @public
  */
-export class ModuleRegistry
+export class ModuleRegistry implements IApplicationContext
 {
        /**
         * Flag to throw @see Error if the dependancies are not resolved/injected
@@ -144,6 +144,18 @@ export class ModuleRegistry
               }
 
               existing.push( property );
+       }
+
+       /**
+        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
+        * 
+        * @public 
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {T}
+        */
+       public get<T>( target: InjectionToken | Type<T> ): T
+       {
+              return void 0;
        }
 
        /**
@@ -280,7 +292,7 @@ export class ModuleRegistry
         * @param {ModuleContext} context 
         * @returns {ApplicationContext}
         */
-       public static resolveContext( context: ModuleContext ): ApplicationContext
+       public static resolveContext( context: ModuleContext ): IApplicationContext
        {
               /** @TODO: implement  */
               return new ApplicationContext( void 0 );
