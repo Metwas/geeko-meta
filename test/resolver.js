@@ -8,5 +8,5 @@ const context = ModuleRegistry.resolveContext({
        import: []
 });
 
-console.log(test);
+console.log(test.request);
 // test.request();

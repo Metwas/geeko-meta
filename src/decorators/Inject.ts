@@ -64,4 +64,4 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
                      index: index
               } );
        };
-}
+};

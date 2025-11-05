@@ -39,4 +39,5 @@ export type PropertyMap<T> = {
        key?: InjectionToken;
        target: Type<T>;
        index?: number;
+       metadata?: any;
 };

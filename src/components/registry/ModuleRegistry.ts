@@ -58,6 +58,14 @@ export class ModuleRegistry implements IApplicationContext
        public static singletonBehaviour: boolean = true;
 
        /**
+        * Default module resolver for this @see ModuleRegistry interface
+        * 
+        * @private
+        * @type {ContextResolver}
+        */
+       private static _resolver: ContextResolver = void 0;
+
+       /**
         * Used to track injectables via the decorator ID
         * 
         * @public
@@ -155,7 +163,7 @@ export class ModuleRegistry implements IApplicationContext
         */
        public get<T>( target: InjectionToken | Type<T> ): T
        {
-              return void 0;
+              return ModuleRegistry._resolver.resolve( target );
        }
 
        /**

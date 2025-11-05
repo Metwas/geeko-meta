@@ -35,13 +35,32 @@ import { InjectionToken, Type } from "../types";
 export interface IApplicationContext
 {
        /**
-        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
+        * Gets the @see T from the specified @see InjectionToken or @see Type<T>
         * 
         * @public 
         * @param {InjectionToken | Type<T>} target 
         * @returns {T}
         */
        get<T>( target: InjectionToken | Type<T> ): T;
+
+       /**
+        * Gets all modules of @see T from the specified injectable token
+        * 
+        * @public 
+        * @param {InjectionToken} inject 
+        * @returns {Array<T>}
+        */
+       getAll<T>( inject: InjectionToken ): Array<T>;
+
+       /**
+        * Gets the specified property on the given @see Injectable target
+        * 
+        * @public 
+        * @param {InjectionToken} key
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {Unknown}
+        */
+       getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any;
 }
 
 /**
@@ -73,6 +92,31 @@ export class ApplicationContext implements IApplicationContext
         * @returns {T}
         */
        public get<T>( target: InjectionToken | Type<T> ): T
+       {
+              return void 0;
+       }
+
+       /**
+        * Gets all modules of @see T from the specified injectable token
+        * 
+        * @public 
+        * @param {InjectionToken} inject 
+        * @returns {Array<T>}
+        */
+       public getAll<T>( inject: InjectionToken ): Array<T>
+       {
+              return void 0;
+       }
+
+       /**
+        * Gets the specified property on the given @see Injectable target
+        * 
+        * @public 
+        * @param {InjectionToken} key
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {Unknown}
+        */
+       public getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any
        {
               return void 0;
        }
