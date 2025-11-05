@@ -4,7 +4,7 @@
        "description": "Geeko metadata library for decorators & dependency injection",
        "main": "./dist/main.js",
        "scripts": {
-              "build": "node ./scripts/build/ -n geeko-meta -t tsc -o dist/ -e production",
+              "build": "rm -rf ./dist && tsc -p ./tsconfig.json",
               "test": "echo \"Error: no test specified\" && exit 1"
        },
        "author": "Metwas",
@@ -13,6 +13,7 @@
               "reflect-metadata": "^0.2.2"
        },
        "devDependencies": {
-              "@types/node": "^24.9.2"
+              "@types/node": "^24.9.2",
+              "typescript": "^5.9.3"
        }
 }
