@@ -28,6 +28,7 @@ import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { ModuleRegistry } from "../components/registry/ModuleRegistry";
 import { MetadataOptions } from "../types/MetadataOptions";
+import { InjectionToken } from "../types";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -41,24 +42,25 @@ import { Type } from "../types/Type";
  * @param {MetadataOptions} options
  * @returns {CustomDecorator<T>} 
  */
-export const SetMetadata = <K = string, V = any>( metadataKey: K, metadataValue: V, options?: MetadataOptions ): CustomDecorator<K> =>
+export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: K, metadataValue: V, options?: MetadataOptions ): CustomDecorator<K> =>
 {
        const factory = <I extends Object, T = Type>( target: any, key?: any, descriptor?: any ): void =>
        {
               /** Method within as class or object will define the @see descriptor */
               if ( descriptor )
               {
-                     const constructor: Type<T> = target?.constructor;
+                     ModuleRegistry.registryProperty( {
+                            token: metadataKey as InjectionToken,
+                            target: target?.constructor,
+                            key: descriptor.value?.name,
+                            metadata: metadataValue,
+                     } );
 
-                     const wrapper: IModuleWrapper<I, T> = new ModuleWrapper<I, T>( constructor, options );
-                     wrapper.injectable = options?.injectable;
-                     wrapper.useFactory = descriptor.value;
-
-                     ModuleRegistry.register( metadataKey as string, wrapper );
                      return descriptor;
               }
 
               const wrapper: IModuleWrapper<T> = new ModuleWrapper( target, options );
+              wrapper.injectable = options?.injectable;
 
               if ( options?.useValue )
               {
