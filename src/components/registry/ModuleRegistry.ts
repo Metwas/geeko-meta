@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ApplicationContext, IApplicationContext } from "../../interfaces/ApplicationContext";
+import { ApplicationContext } from "../../interfaces/ApplicationContext";
 import { InjectableOptions, InjectionToken } from "../../types";
 import { ModuleContainer } from "../containers/ModuleContainer";
 import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
@@ -39,7 +39,7 @@ import { Type } from "../../types/Type";
  * 
  * @public
  */
-export class ModuleRegistry implements IApplicationContext
+export class ModuleRegistry
 {
        /**
         * Flag to throw @see Error if the dependancies are not resolved/injected
@@ -152,18 +152,6 @@ export class ModuleRegistry implements IApplicationContext
               }
 
               existing.push( property );
-       }
-
-       /**
-        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
-        * 
-        * @public 
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {T}
-        */
-       public get<T>( target: InjectionToken | Type<T> ): T
-       {
-              return ModuleRegistry._resolver.resolve( target );
        }
 
        /**
@@ -297,13 +285,14 @@ export class ModuleRegistry implements IApplicationContext
 
        /**
         * 
+        * 
+        * @public
         * @param {ModuleContext} context 
         * @returns {ApplicationContext}
         */
-       public static resolveContext( context: ModuleContext ): IApplicationContext
+       public static resolveContext( context: ModuleContext ): ApplicationContext
        {
               /** @TODO: implement  */
               return new ApplicationContext( void 0 );
        }
 }
-

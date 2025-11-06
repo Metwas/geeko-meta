@@ -32,35 +32,23 @@ import { InjectionToken, Type } from "../types";
 /**
  * @public
  */
-export interface IApplicationContext
+export interface IModuleRegistry
 {
        /**
-        * Gets the @see T from the specified @see InjectionToken or @see Type<T>
+        * Contains all injectable @see IModuleWrapper instances
         * 
-        * @public 
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {T}
+        * @private
+        * @type {ModuleContainer}
         */
-       get<T>( target: InjectionToken | Type<T> ): T;
+       modules: ModuleContainer;
 
        /**
-        * Gets all modules of @see T from the specified injectable token
+        * Contains all injectable @see InjectionToken references
         * 
-        * @public 
-        * @param {InjectionToken} inject 
-        * @returns {Array<T>}
+        * @private
+        * @type {InjectableContainer}
         */
-       getAll<T>( inject: InjectionToken ): Array<T>;
-
-       /**
-        * Gets the specified property on the given @see Injectable target
-        * 
-        * @public 
-        * @param {InjectionToken} key
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {Unknown}
-        */
-       getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any;
+       injectables: InjectableContainer;
 }
 
 /**
@@ -68,7 +56,7 @@ export interface IApplicationContext
  * 
  * @public
  */
-export class ApplicationContext implements IApplicationContext
+export class ApplicationContext
 {
        /**
         * Expects a Module collection based from @see ModuleContainer
@@ -76,13 +64,7 @@ export class ApplicationContext implements IApplicationContext
         * @public
         * @param {ModuleContainer} modules 
         */
-       public constructor( public readonly modules: ModuleContainer )
-       {
-              if ( !modules )
-              {
-                     this.modules = new ModuleContainer();
-              }
-       }
+       public constructor( public readonly registry: IModuleRegistry ) { }
 
        /**
         * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
