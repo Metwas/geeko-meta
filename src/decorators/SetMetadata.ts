@@ -26,7 +26,7 @@
 
 import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
-import { ModuleRegistry } from "../components/registry/ModuleRegistry";
+import { ModuleRegistry } from "../interfaces/Reflector";
 import { MetadataOptions } from "../types/MetadataOptions";
 import { InjectionToken } from "../types";
 import { Type } from "../types/Type";

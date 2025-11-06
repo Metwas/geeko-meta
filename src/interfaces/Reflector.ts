@@ -24,62 +24,47 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ApplicationContext } from "../../interfaces/ApplicationContext";
-import { InjectableOptions, InjectionToken } from "../../types";
-import { ModuleContainer } from "../containers/ModuleContainer";
-import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
-import { PropertyMap } from "../../types/PropertyMap";
-import { ModuleContext } from "../../types/Context";
-import { Type } from "../../types/Type";
+import { InjectableOptions, InjectionToken } from "../types";
+import { IModuleRegistry } from "./registry/IModuleRegistry";
+import { AUTO_INJECT_ENABLED } from "../global/environment";
+import { ApplicationContext } from "./ApplicationContext";
+import { PropertyMap } from "../types/PropertyMap";
+import { ModuleContext } from "../types/Context";
+import { IModuleWrapper } from "./ModuleWrapper";
+import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Global @see IModuleWrapper registry
+ * Global @see IModuleWrapper registry service
  * 
  * @public
  */
-export class ModuleRegistry
+export class Reflector
 {
-       /**
-        * Flag to throw @see Error if the dependancies are not resolved/injected
-        * 
-        * @public
-        * @type {Boolean}
-        */
-       public static throwUninjectableDependancies: boolean = false;
-
        /**
         * Singleton behaviour flag to indicate only one @see Type<T> instance can exist within this @see ModuleRegistry
         * 
         * @public
         * @type {Boolean}
         */
-       public static singletonBehaviour: boolean = true;
+       public static FACTORY_BEHAVIOUR_SINGLETON: boolean = true;
 
        /**
         * Default module resolver for this @see ModuleRegistry interface
         * 
         * @private
-        * @type {ContextResolver}
+        * @type {Resolver}
         */
-       private static _resolver: ContextResolver = void 0;
+       private static _resolver: Resolver = void 0;
 
        /**
-        * Used to track injectables via the decorator ID
-        * 
-        * @public
-        * @type {Map<string, Array<InjectionToken>>}
-        */
-       private static _injectables: Map<string, Array<InjectionToken>> = new Map<string, Array<InjectionToken>>();
-
-       /**
-        * Global static @see ModuleContainer - which contains all injectable @see IModuleWrapper instances
+        * Default module resolver for this @see ModuleRegistry interface
         * 
         * @private
-        * @type {ModuleContainer}
+        * @type {Resolver}
         */
-       private static _modules: ModuleContainer = new ModuleContainer();
+       private static _registry: IModuleRegistry = void 0;
 
        /**
         * @see Inject property graph
@@ -98,7 +83,7 @@ export class ModuleRegistry
         */
        public static register<I, T>( key: string, wrapper: IModuleWrapper<I, T> ): void
        {
-              if ( !wrapper )
+              if ( !wrapper || AUTO_INJECT_ENABLED() === false )
               {
                      return void 0;
               }

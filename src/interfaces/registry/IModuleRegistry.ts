@@ -24,60 +24,37 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleRegistry } from "./registry/IModuleRegistry";
-import { InjectionToken, Type } from "../types";
+import { InjectionToken, PropertyMap } from "../../types";
+import { IModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Default @see IApplicationContext implementation
- * 
  * @public
  */
-export class ApplicationContext
+export interface IModuleRegistry
 {
        /**
-        * Expects @see IModuleRegistry instance
+        * Contains all injectable @see IModuleWrapper instances
         * 
         * @public
-        * @param {IModuleRegistry} registry 
+        * @returns {Map<InjectionToken, IModuleWrapper<any, any>>}
         */
-       public constructor( public readonly registry: IModuleRegistry ) { }
+       modules(): Map<InjectionToken, IModuleWrapper<any, any>>;
 
        /**
-        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
+        * @see Inject property graph
         * 
-        * @public 
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {T}
+        * @public
+        * @returns {Map<InjectionToken, Array<PropertyMap>>}
         */
-       public get<T>( target: InjectionToken | Type<T> ): T
-       {
-              return void 0;
-       }
+       properties(): Map<InjectionToken, Array<PropertyMap<any>>>;
 
        /**
-        * Gets all modules of @see T from the specified injectable token
+        * Contains all injectable @see InjectionToken references
         * 
-        * @public 
-        * @param {InjectionToken} inject 
-        * @returns {Array<T>}
+        * @public
+        * @returns {Map<InjectionToken, Array<InjectionToken>>}
         */
-       public getAll<T>( inject: InjectionToken ): Array<T>
-       {
-              return void 0;
-       }
-
-       /**
-        * Gets the specified property on the given @see Injectable target
-        * 
-        * @public 
-        * @param {InjectionToken} key
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {Unknown}
-        */
-       public getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any
-       {
-              return void 0;
-       }
+       injectables(): Map<InjectionToken, Array<InjectionToken>>;
 }

@@ -24,8 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ModuleRegistry } from "../components/registry/ModuleRegistry";
 import { InjectionToken } from "../types/Injectable";
+import { Reflector } from "../interfaces/Reflector";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -49,7 +49,7 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
               {
                      const type: any = target?.constructor;
                      /** Method parameter */
-                     ModuleRegistry.registryProperty( {
+                     Reflector.registryProperty( {
                             target: type,
                             token: token,
                             key: key,
@@ -58,7 +58,7 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
                      return void 0;
               }
 
-              ModuleRegistry.registryProperty( {
+              Reflector.registryProperty( {
                      target: target as any,
                      token: token,
                      index: index

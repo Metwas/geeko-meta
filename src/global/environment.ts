@@ -24,14 +24,26 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
-import { InjectionToken } from "../../types";
+import { env } from "node:process";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Strong-typed container for @see IModuleWrapper definitions
+ * Global environment variable to declare if automatic injection is enabled
  * 
  * @public
+ * @type {String}
  */
-export class ModuleContainer extends Map<InjectionToken, IModuleWrapper<any, any>> { }
+export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
+
+/**
+ * Checks if the automatic injection @see Injectable is enabled
+ * 
+ * @public
+ * @returns {Boolean}
+ */
+export const AUTO_INJECT_ENABLED = function (): boolean
+{
+       /** Default to enabled if undefined */
+       return env[ ENV_GEEKO_AUTO_INJECT ] === "0" ? false : true;
+};
