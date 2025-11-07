@@ -26,8 +26,8 @@
 
 import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
-import { ModuleRegistry } from "../interfaces/Reflector";
 import { MetadataOptions } from "../types/MetadataOptions";
+import { Reflector } from "../interfaces/Reflector";
 import { InjectionToken } from "../types";
 import { Type } from "../types/Type";
 
@@ -49,7 +49,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: 
               /** Method within as class or object will define the @see descriptor */
               if ( descriptor )
               {
-                     ModuleRegistry.registryProperty( {
+                     Reflector.registryProperty( {
                             token: metadataKey as InjectionToken,
                             target: target?.constructor,
                             key: descriptor.value?.name,
@@ -71,7 +71,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: 
                      wrapper.useFactory = options?.useFactory;
               }
 
-              ModuleRegistry.register( metadataKey as string, wrapper );
+              Reflector.register( metadataKey as string, wrapper );
        };
 
        factory.KEY = metadataKey;
