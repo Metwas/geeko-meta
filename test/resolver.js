@@ -1,9 +1,9 @@
-const { ModuleRegistry, Test } = require('../dist/main');
+const { Reflector, Test } = require('../dist/main');
 
-const test = ModuleRegistry.resolve(Test);
+const test = Reflector.get(Test);
 
 /** @TODO: resolve from @see ModuleContext  */
-const context = ModuleRegistry.resolveContext({
+const context = Reflector.getContext({
        providers: [],
        import: []
 });
