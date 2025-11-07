@@ -26,6 +26,7 @@
 
 import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
+import { AUTO_INJECT_ENABLED } from "../global/environment";
 import { MetadataOptions } from "../types/MetadataOptions";
 import { Reflector } from "../interfaces/Reflector";
 import { InjectionToken } from "../types";
@@ -46,6 +47,11 @@ export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: 
 {
        const factory = <I extends Object, T = Type>( target: any, key?: any, descriptor?: any ): void =>
        {
+              if ( AUTO_INJECT_ENABLED() === false )
+              {
+                     return void 0;
+              }
+
               /** Method within as class or object will define the @see descriptor */
               if ( descriptor )
               {

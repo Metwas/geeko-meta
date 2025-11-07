@@ -37,6 +37,12 @@ import { env } from "node:process";
 export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
 
 /**
+ * @public
+ * @type {Boolean}
+ */
+let ENV_AUTO_INJECT_ENABLED: boolean = void 0;
+
+/**
  * Checks if the automatic injection @see Injectable is enabled
  * 
  * @public
@@ -44,6 +50,11 @@ export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
  */
 export const AUTO_INJECT_ENABLED = function (): boolean
 {
-       /** Default to enabled if undefined */
-       return env[ ENV_GEEKO_AUTO_INJECT ] === "0" ? false : true;
+       if ( !ENV_AUTO_INJECT_ENABLED )
+       {
+              /** Default to enabled if undefined */
+              return ENV_AUTO_INJECT_ENABLED = env[ ENV_GEEKO_AUTO_INJECT ] === "0" ? false : true;
+       }
+
+       return ENV_AUTO_INJECT_ENABLED;
 };
