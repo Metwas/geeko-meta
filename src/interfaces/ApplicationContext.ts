@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IModuleRegistry } from "./registry/IModuleRegistry";
+import { IResolver } from "./resolvers/IResolver";
 import { InjectionToken, Type } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -40,9 +41,10 @@ export class ApplicationContext
         * Expects @see IModuleRegistry instance
         * 
         * @public
-        * @param {IModuleRegistry} registry 
+        * @param {IModuleRegistry} registry
+        * @param {IResolver} resolver
         */
-       public constructor( public readonly registry: IModuleRegistry ) { }
+       public constructor( public readonly registry: IModuleRegistry, public readonly resolver: IResolver ) { }
 
        /**
         * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
