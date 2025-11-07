@@ -1,6 +1,6 @@
 {
        "name": "geeko-meta",
-       "version": "0.0.1",
+       "version": "1.0.1",
        "description": "Geeko metadata library for decorators & dependency injection",
        "main": "./dist/main.js",
        "scripts": {
@@ -10,10 +10,11 @@
        "author": "Metwas",
        "license": "MIT",
        "dependencies": {
+              "@geeko/log": "^1.1.0",
               "reflect-metadata": "^0.2.2"
        },
        "devDependencies": {
-              "@types/node": "^24.9.2",
+              "@types/node": "^24.10.0",
               "typescript": "^5.9.3"
        }
 }
