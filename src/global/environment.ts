@@ -24,50 +24,37 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { AUTO_INJECT_ENABLED } from "../global/environment";
-import { InjectionToken } from "../types/Injectable";
-import { Reflector } from "../interfaces/Reflector";
+import { env } from "node:process";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Injects property or method parameter metadata
+ * Global environment variable to declare if automatic injection is enabled
  * 
  * @public
- * @param {InjectionToken} token 
- * @returns {PropertyDecorator & ParameterDecorator}
+ * @type {String}
  */
-export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDecorator =>
+export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
+
+/**
+ * @public
+ * @type {Boolean}
+ */
+let ENV_AUTO_INJECT_ENABLED: boolean = void 0;
+
+/**
+ * Checks if the automatic injection @see Injectable is enabled
+ * 
+ * @public
+ * @returns {Boolean}
+ */
+export const AUTO_INJECT_ENABLED = function (): boolean
 {
-       /**
-        * @param {Object} target
-        * @param {String} key
-        * @param {Number} index
-        */
-       return ( target: object, key: string, index?: number ): void =>
+       if ( !ENV_AUTO_INJECT_ENABLED )
        {
-              if ( AUTO_INJECT_ENABLED() === false )
-              {
-                     return void 0;
-              }
+              /** Default to enabled if undefined */
+              return ENV_AUTO_INJECT_ENABLED = env[ ENV_GEEKO_AUTO_INJECT ] === "0" ? false : true;
+       }
 
-              if ( !index && key )
-              {
-                     const type: any = target?.constructor;
-                     /** Method parameter */
-                     Reflector.registryProperty( {
-                            target: type,
-                            token: token,
-                            key: key,
-                     } );
-
-                     return void 0;
-              }
-
-              Reflector.registryProperty( {
-                     target: target as any,
-                     token: token,
-                     index: index
-              } );
-       };
+       return ENV_AUTO_INJECT_ENABLED;
 };

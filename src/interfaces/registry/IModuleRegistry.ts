@@ -24,13 +24,37 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleWrapper } from "../../interfaces/ModuleWrapper";
+import { InjectionToken, PropertyMap } from "../../types";
+import { IModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Strong-typed container for @see IModuleWrapper definitions
- * 
  * @public
  */
-export class ModuleContainer extends Map<string | symbol, IModuleWrapper<any, any>> { }
+export interface IModuleRegistry
+{
+       /**
+        * Contains all injectable @see IModuleWrapper instances
+        * 
+        * @public
+        * @returns {Map<InjectionToken, IModuleWrapper<any, any>>}
+        */
+       modules(): Map<InjectionToken, IModuleWrapper<any, any>>;
+
+       /**
+        * @see Inject property graph
+        * 
+        * @public
+        * @returns {Map<InjectionToken, Array<PropertyMap>>}
+        */
+       properties(): Map<InjectionToken, Array<PropertyMap<any>>>;
+
+       /**
+        * Contains all injectable @see InjectionToken references
+        * 
+        * @public
+        * @returns {Map<InjectionToken, Array<InjectionToken>>}
+        */
+       injectables(): Map<InjectionToken, Array<InjectionToken>>;
+}

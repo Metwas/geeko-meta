@@ -1,3 +1,0 @@
-[submodule "scripts/build"]
-	path = scripts/build
-	url = git@github.com:Metwas/geeko-forge.git

@@ -1,0 +1,85 @@
+/**
+     MIT License
+
+     @Copyright (c) Metwas
+
+     Permission is hereby granted, free of charge, to any person obtaining a copy
+     of this software and associated documentation files (the "Software"), to deal
+     in the Software without restriction, including without limitation the rights
+     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     copies of the Software, and to permit persons to whom the Software is
+     furnished to do so, subject to the following conditions:
+
+     The above Copyright notice and this permission notice shall be included in all
+     copies or substantial portions of the Software.
+     
+     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     AUTHORS OR Copyright HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     SOFTWARE.
+*/
+
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+import { IModuleRegistry } from "./registry/IModuleRegistry";
+import { IResolver } from "./resolvers/IResolver";
+import { InjectionToken, Type } from "../types";
+
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+/**
+ * Default @see IApplicationContext implementation
+ * 
+ * @public
+ */
+export class ApplicationContext
+{
+       /**
+        * Expects @see IModuleRegistry instance
+        * 
+        * @public
+        * @param {IModuleRegistry} registry
+        * @param {IResolver} resolver
+        */
+       public constructor( public readonly registry: IModuleRegistry, public readonly resolver: IResolver ) { }
+
+       /**
+        * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
+        * 
+        * @public 
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {T}
+        */
+       public get<T>( target: InjectionToken | Type<T> ): T
+       {
+              return void 0;
+       }
+
+       /**
+        * Gets all modules of @see T from the specified injectable token
+        * 
+        * @public 
+        * @param {InjectionToken} inject 
+        * @returns {Array<T>}
+        */
+       public getAll<T>( inject: InjectionToken ): Array<T>
+       {
+              return void 0;
+       }
+
+       /**
+        * Gets the specified property on the given @see Injectable target
+        * 
+        * @public 
+        * @param {InjectionToken} key
+        * @param {InjectionToken | Type<T>} target 
+        * @returns {Unknown}
+        */
+       public getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any
+       {
+              return void 0;
+       }
+}

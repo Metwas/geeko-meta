@@ -28,7 +28,13 @@ import "reflect-metadata";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export * from "./components/registry/ModuleRegistry";
+export * from "./interfaces/resolvers/DefaultResolver";
+export * from "./interfaces/registry/IModuleRegistry";
+export * from "./interfaces/registry/ModuleRegistry";
+export * from "./interfaces/resolvers/IResolver";
+export * from "./interfaces/ApplicationContext";
 export * from "./interfaces/ModuleWrapper";
+export * from "./interfaces/Reflector";
+export * from "./global/environment";
 export * from "./decorators";
 export * from "./types";

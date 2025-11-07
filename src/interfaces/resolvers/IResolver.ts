@@ -24,50 +24,24 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { AUTO_INJECT_ENABLED } from "../global/environment";
-import { InjectionToken } from "../types/Injectable";
-import { Reflector } from "../interfaces/Reflector";
+import { IModuleRegistry } from "../registry/IModuleRegistry";
+import { InjectionToken, Type } from "../../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Injects property or method parameter metadata
+ * Core @see IModuleWrapper resolver interface
  * 
- * @public
- * @param {InjectionToken} token 
- * @returns {PropertyDecorator & ParameterDecorator}
+ * @public 
  */
-export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDecorator =>
+export interface IResolver
 {
        /**
-        * @param {Object} target
-        * @param {String} key
-        * @param {Number} index
+        * Resolves the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        * 
+        * @public 
+        * @param {InjectionToken | Type<T>} token 
+        * @param {IModuleRegistry} registry 
         */
-       return ( target: object, key: string, index?: number ): void =>
-       {
-              if ( AUTO_INJECT_ENABLED() === false )
-              {
-                     return void 0;
-              }
-
-              if ( !index && key )
-              {
-                     const type: any = target?.constructor;
-                     /** Method parameter */
-                     Reflector.registryProperty( {
-                            target: type,
-                            token: token,
-                            key: key,
-                     } );
-
-                     return void 0;
-              }
-
-              Reflector.registryProperty( {
-                     target: target as any,
-                     token: token,
-                     index: index
-              } );
-       };
-};
+       resolve<T>( token: InjectionToken | Type<T>, registry: IModuleRegistry ): T;
+}
