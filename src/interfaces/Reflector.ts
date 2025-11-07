@@ -24,13 +24,16 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from "../types";
+import { DefaultResolver } from "./resolvers/DefaultResolver";
 import { IModuleRegistry } from "./registry/IModuleRegistry";
-import { AUTO_INJECT_ENABLED } from "../global/environment";
+import { ModuleRegistry } from "./registry/ModuleRegistry";
 import { ApplicationContext } from "./ApplicationContext";
+import { InjectionToken } from "../types/Injectable";
 import { PropertyMap } from "../types/PropertyMap";
-import { ModuleContext } from "../types/Context";
+import { IResolver } from "./resolvers/IResolver";
 import { IModuleWrapper } from "./ModuleWrapper";
+import { ModuleContext } from "../types/Context";
+import { LogService } from "@geeko/log";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -43,23 +46,15 @@ import { Type } from "../types/Type";
 export class Reflector
 {
        /**
-        * Singleton behaviour flag to indicate only one @see Type<T> instance can exist within this @see ModuleRegistry
-        * 
-        * @public
-        * @type {Boolean}
-        */
-       public static FACTORY_BEHAVIOUR_SINGLETON: boolean = true;
-
-       /**
-        * Default module resolver for this @see ModuleRegistry interface
+        * Default module resolver for this @see Reflector interface
         * 
         * @private
-        * @type {Resolver}
+        * @type {IResolver}
         */
-       private static _resolver: Resolver = void 0;
+       private static _resolver: IResolver = void 0;
 
        /**
-        * Default module resolver for this @see ModuleRegistry interface
+        * Default module resolver for this @see Reflector interface
         * 
         * @private
         * @type {Resolver}
@@ -67,12 +62,12 @@ export class Reflector
        private static _registry: IModuleRegistry = void 0;
 
        /**
-        * @see Inject property graph
+        * Default logger
         * 
         * @private
-        * @type {Map<InjectionToken, Array<PropertyMap>>}
+        * @type {LogService}
         */
-       private static _propertyGraph: Map<InjectionToken, Array<PropertyMap<any>>> = new Map<InjectionToken, Array<PropertyMap<any>>>();
+       private static _log: LogService = void 0;
 
        /**
         * Registers the @see IModuleWrapper instance to the global @see ModuleContainer
@@ -83,27 +78,35 @@ export class Reflector
         */
        public static register<I, T>( key: string, wrapper: IModuleWrapper<I, T> ): void
        {
-              if ( !wrapper || AUTO_INJECT_ENABLED() === false )
+              if ( !wrapper )
               {
                      return void 0;
               }
 
+              if ( Reflector.ready() === false )
+              {
+                     return void 0;
+              }
+
+              const injectables: Map<InjectionToken, Array<InjectionToken>> = Reflector._registry.injectables();
+              const modules: Map<InjectionToken, IModuleWrapper<I, T>> = Reflector._registry.modules();
+
               /** Key is the Injector token */
-              const existing: Array<InjectionToken> = this._injectables.get( key );
+              const existing: Array<InjectionToken> = injectables.get( key );
               let isArray: boolean = Array.isArray( existing );
               let name: InjectionToken = wrapper.name();
 
               if ( name && isArray && existing.indexOf( name ) > -1 )
               {
                      /** Already registered injectable of type @see T */
-                     return;
+                     return void 0;
               }
 
               if ( wrapper.injectable === true )
               {
                      if ( isArray === false )
                      {
-                            this._injectables.set( key, [ name ] );
+                            injectables.set( key, [ name ] );
                      }
                      else
                      {
@@ -111,7 +114,7 @@ export class Reflector
                      }
               }
 
-              this._modules.set( name, wrapper );
+              modules.set( name, wrapper );
        }
 
        /**
@@ -127,12 +130,19 @@ export class Reflector
                      return void 0;
               }
 
+              if ( Reflector.ready() === false )
+              {
+                     return void 0;
+              }
+
+              const properties: Map<InjectionToken, Array<PropertyMap<any>>> = Reflector._registry.properties();
+
               const name: string = property.target.name;
-              const existing: Array<PropertyMap<T>> = this._propertyGraph.get( name );
+              const existing: Array<PropertyMap<T>> = properties.get( name );
 
               if ( !existing )
               {
-                     this._propertyGraph.set( name, [ property ] );
+                     properties.set( name, [ property ] );
                      return void 0;
               }
 
@@ -147,137 +157,96 @@ export class Reflector
         * @param {InjectableOptions} options
         * @returns {T}
         */
-       public static resolve<T = new () => void>( target: Type<T>, options?: InjectableOptions ): T
+       public static get<T = new () => void>( token: InjectionToken | Type<T> ): T
        {
-              const name: string = options?.token ?? target?.name;
-
-              if ( typeof name !== "string" || typeof target !== "function" )
+              if ( Reflector.ready() === false )
               {
                      return void 0;
               }
 
-              const module: IModuleWrapper<T> = this._modules.get( name );
-
-              if ( !module || module.injectable === false )
-              {
-                     return void 0;
-              }
-
-              const mtarget: Type<T> = module.target() as Type<T>;
-              let instance: any = module.instance();
-
-              /** Singleton behaviour if @see module already has instance assigned */
-              if ( instance && ModuleRegistry.singletonBehaviour === true )
-              {
-                     return instance;
-              }
-
-              const propertyMap: Array<PropertyMap<T>> = this._propertyGraph.get( mtarget.name );
-              const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", mtarget );
-              const plength: number = propertyMap?.length ?? 0;
-              const length: number = dependancies?.length ?? 0;
-              let resolved: Array<any> = [];
-
-              if ( length > 0 )
-              {
-                     /** resolve dependancies first- @TODO Attempt to resolve forwardRef or circular dependancies */
-                     let index: number = 0;
-
-                     for ( ; index < length; ++index )
-                     {
-                            const type: Type<T> = dependancies[ index ];
-                            let isInjected: boolean = false;
-                            let _resolved: T = void 0;
-
-                            for ( let i = 0; i < plength; ++i )
-                            {
-                                   const map: PropertyMap<T> = propertyMap[ i ];
-
-                                   if ( map?.index === index )
-                                   {
-                                          isInjected = true;
-                                          /** Fetch dependancy based on injected token */
-                                          _resolved = this.resolve( map.target, {
-                                                 token: map.token
-                                          } );
-
-                                          break;
-                                   }
-                            }
-
-                            let dependancy: T = void 0;
-
-                            if ( isInjected )
-                            {
-                                   /** Resolve custom module referenced by @see Inject */
-                                   dependancy = _resolved;
-                            }
-                            else
-                            {
-                                   dependancy = this.resolve( type );
-                            }
-
-                            if ( !dependancy || ( isInjected && !_resolved ) )
-                            {
-                                   if ( ModuleRegistry.throwUninjectableDependancies === true )
-                                   {
-                                          throw new Error( `Unable to resolve dependancy [${dependancies[ index ]}] at index [${index}]` );
-                                   }
-                            }
-
-                            resolved.push( dependancy );
-                     }
-              }
-
-              if ( module.useValue )
-              {
-                     instance = module.useValue;
-              }
-              else if ( typeof module.useFactory === "function" )
-              {
-                     instance = module.useFactory();
-              }
-              else
-              {
-                     instance = new mtarget( ...resolved );
-              }
-
-              /** Resolve @see target injected properties */
-              let pindex: number = 0;
-
-              for ( ; pindex < plength; ++pindex )
-              {
-                     const property: PropertyMap<T> = propertyMap[ pindex ];
-
-                     /** Only resolve property.key */
-                     if ( typeof property.key === "string" )
-                     {
-                            const resolved: any = this.resolve( property.target, {
-                                   token: property.token
-                            } );
-
-                            if ( !resolved )
-                            {
-                                   continue;
-                            }
-
-                            instance[ property.key ] = resolved;
-                     }
-              }
-
-              return module.instance( instance );
+              return Reflector._resolver.resolve( token, Reflector._registry );
        }
 
        /**
-        * 
+        * Resolves a new @see ApplicationContext based on the given @see ModuleContext options
         * 
         * @public
         * @param {ModuleContext} context 
         * @returns {ApplicationContext}
-        */
-       public static resolveContext( context: ModuleContext ): ApplicationContext
+       */
+       public static getContext( context: ModuleContext ): ApplicationContext
        {
               /** @TODO: implement  */
-              return new ApplicationContext( void 0 );
+              return new ApplicationContext( void 0, void 0 );
+       }
+
+       /**
+        * Checks and prepares the static @see Reflector defaults
+        * 
+        * @public
+        * @returns {Boolean}
+        */
+       public static ready(): boolean
+       {
+              try
+              {
+                     if ( !Reflector._log )
+                     {
+                            Reflector._log = new LogService( {
+                                   title: "Reflect",
+                                   level: "verbose"
+                            } );
+                     }
+
+                     if ( !Reflector._registry )
+                     {
+                            Reflector.registry( new ModuleRegistry() );
+                     }
+
+                     if ( !Reflector._resolver )
+                     {
+                            Reflector.resolver( new DefaultResolver( this._log ) );
+                     }
+
+                     return true;
+              }
+              catch ( error )
+              {
+                     return false;
+              }
+       }
+
+       /**
+        * Gets/Sets the @see IResolver reference
+        * 
+        * @public
+        * @param {IResolver} override 
+        * @returns {IResolver}
+        */
+       public static resolver( override: IResolver ): IResolver
+       {
+              if ( override )
+              {
+                     Reflector._resolver = override;
+              }
+
+              return Reflector._resolver;
+       }
+
+       /**
+        * Gets/Sets the @see IModuleRegistry reference
+        * 
+        * @public
+        * @param {IModuleRegistry} override 
+        * @returns {IModuleRegistry}
+        */
+       public static registry( override: IModuleRegistry ): IModuleRegistry
+       {
+              if ( override )
+              {
+                     Reflector._registry = override;
+              }
+
+              return Reflector._registry;
        }
 }
