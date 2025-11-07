@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { AUTO_INJECT_ENABLED } from "../global/environment";
 import { InjectionToken } from "../types/Injectable";
 import { Reflector } from "../interfaces/Reflector";
 
@@ -45,6 +46,11 @@ export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDe
         */
        return ( target: object, key: string, index?: number ): void =>
        {
+              if ( AUTO_INJECT_ENABLED() === false )
+              {
+                     return void 0;
+              }
+
               if ( !index && key )
               {
                      const type: any = target?.constructor;

@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
+import { AUTO_INJECT_ENABLED } from "../global/environment";
 import { InjectableOptions } from "../types/Injectable";
 import { CustomDecorator } from "../types/Decorators";
 import { SetMetadata } from "./SetMetadata";
@@ -41,6 +42,11 @@ import { MetadataOptions } from "../types";
  */
 export const Injectable = ( options?: string | InjectableOptions ): CustomDecorator =>
 {
+       if ( AUTO_INJECT_ENABLED() === false )
+       {
+              return void 0;
+       }
+
        let metadata: MetadataOptions = Object.assign( typeof options === "string" ? { token: options } : ( options ?? {} ), {
               injectable: true,
        } );
