@@ -34,65 +34,7 @@ import { Type } from "../types/Type";
  * 
  * @public
  */
-export interface IModuleWrapper<I extends Object, T = Type>
-{
-       /**
-        * Get/Set the base object/class @see Type<T>
-        * 
-        * @public
-        * @param {Type<T>} override 
-        * @returns {Type<T>}
-        */
-       target( override?: Type<T> ): Type<T>;
-
-       /**
-        * Get/Set the target @see Type<T> instance value
-        * 
-        * @public
-        * @param {I} override 
-        * @returns {I}
-        */
-       instance( override?: I ): I;
-
-       /**
-        * Gets the @see InjectionToken name or @see Type<T> constructor name
-        * 
-        * @public
-        * @returns {InjectionToken | undefined}
-        */
-       name(): InjectionToken | undefined;
-
-       /**
-        * Custom factory function to build the instance of @see Type<T>
-        * 
-        * @public
-        * @type {Function}
-        */
-       useFactory?: ( ...args: Array<any> ) => I;
-
-       /**
-        * Flag to indicate if this module is injectable
-        * 
-        * @public
-        * @type {Boolean}
-        */
-       injectable?: boolean;
-
-       /**
-        * Get/Set the @see Type<T> instance value. This takes priority over @see useFactory
-        * 
-        * @public
-        * @type {I}
-        */
-       useValue?: I;
-}
-
-/**
- * @see Type<T> module factory wrapper interface
- * 
- * @public
- */
-export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
+export class ModuleWrapper<I, T>
 {
        /**
         * Expects a given type @see Object target reference
@@ -105,6 +47,8 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
        {
               this._target = target;
               this._token = options?.token;
+              this.useFactory = options?.useFactory;
+              this.useValue = options?.useValue;
        }
 
        /**
@@ -130,6 +74,22 @@ export class ModuleWrapper<I, T> implements IModuleWrapper<I, T>
         * @type {I}
         */
        private _instance: I = void 0;
+
+       /**
+        * Get/Set the @see Type<T> instance value. This takes priority over @see useFactory
+        * 
+        * @public
+        * @type {I}
+        */
+       public useValue?: I;
+
+       /**
+        * Custom factory function to build the instance of @see Type<T>
+        * 
+        * @public
+        * @type {Function}
+        */
+       public useFactory?: ( ...args: Array<any> ) => I;
 
        /**
         * Flag to indicate if this module is injectable

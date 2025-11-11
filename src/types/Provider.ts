@@ -34,6 +34,4 @@ import { Type } from "./Type";
  * 
  * @public
  */
-export type Provider<T> = InjectableOptions & {
-       inject: Array<Type<T>> | Array<InjectionToken>;
-};
+export type Provider<T> = InjectableOptions | Array<Type<T>>;

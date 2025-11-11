@@ -24,22 +24,24 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { InjectableOptions, InjectionToken } from "../types/Injectable";
+import { GEEKO_META_LOGGER_LEVEL } from "../global/environment";
 import { DefaultResolver } from "./resolvers/DefaultResolver";
 import { IModuleRegistry } from "./registry/IModuleRegistry";
 import { ModuleRegistry } from "./registry/ModuleRegistry";
 import { ApplicationContext } from "./ApplicationContext";
-import { InjectionToken } from "../types/Injectable";
 import { PropertyMap } from "../types/PropertyMap";
+import { LogLevel, LogService } from "@geeko/log";
 import { IResolver } from "./resolvers/IResolver";
-import { IModuleWrapper } from "./ModuleWrapper";
 import { ModuleContext } from "../types/Context";
-import { LogService } from "@geeko/log";
+import { ModuleWrapper } from "./ModuleWrapper";
+import { Provider } from "../types/Provider";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Global @see IModuleWrapper registry service
+ * Global @see ModuleWrapper registry service
  * 
  * @public
  */
@@ -70,13 +72,21 @@ export class Reflector
        private static _log: LogService = void 0;
 
        /**
-        * Registers the @see IModuleWrapper instance to the global @see ModuleContainer
+         * Ready state
+         * 
+         * @private
+         * @type {Boolean}
+         */
+       private static _ready: boolean = false;
+
+       /**
+        * Registers the @see ModuleWrapper instance to the global @see ModuleContainer
         * 
         * @public
         * @param {String} key 
-        * @param {IModuleWrapper<I, T>} wrapper 
+        * @param {ModuleWrapper<I, T>} wrapper 
         */
-       public static register<I, T>( key: string, wrapper: IModuleWrapper<I, T> ): void
+       public static register<I, T>( key: string, wrapper: ModuleWrapper<I, T> ): void
        {
               if ( !wrapper )
               {
@@ -89,7 +99,7 @@ export class Reflector
               }
 
               const injectables: Map<InjectionToken, Array<InjectionToken>> = Reflector._registry.injectables();
-              const modules: Map<InjectionToken, IModuleWrapper<I, T>> = Reflector._registry.modules();
+              const modules: Map<InjectionToken, ModuleWrapper<I, T>> = Reflector._registry.modules();
 
               /** Key is the Injector token */
               const existing: Array<InjectionToken> = injectables.get( key );
@@ -174,10 +184,62 @@ export class Reflector
         * @param {ModuleContext} context 
         * @returns {ApplicationContext}
        */
-       public static getContext( context: ModuleContext ): ApplicationContext
+       public static createApplicationContext( context: ModuleContext ): ApplicationContext
        {
-              /** @TODO: implement  */
-              return new ApplicationContext( void 0, void 0 );
+              if ( !context || typeof context !== "object" )
+              {
+                     return void 0;
+              }
+
+              const providers: Array<Provider<any>> = context.providers;
+
+              let length: number = providers.length;
+
+              if ( length === 0 )
+              {
+                     /** Not point doing anything if there are no @see Provider objects */
+                     return void 0;
+              }
+
+              let index: number = 0;
+
+              const resolver: IResolver = new DefaultResolver( context.logger ?? Reflector._log );
+              const registry: IModuleRegistry = new ModuleRegistry();
+
+              for ( ; index < length; ++index )
+              {
+                     try
+                     {
+                            const provider: Provider<any> = providers[ index ];
+                            let options: InjectableOptions = void 0;
+                            let target: Type<any> = void 0;
+
+                            if ( typeof ( provider as InjectableOptions )?.token === "string" )
+                            {
+                                   options = {
+                                          useFactory: ( provider as InjectableOptions ).useFactory,
+                                          useValue: ( provider as InjectableOptions ).useValue,
+                                          token: ( provider as InjectableOptions ).token
+                                   };
+                            }
+                            else if ( ( provider as Type<any> )?.name )
+                            {
+                                   target = provider as Type<any>;
+                            }
+
+                            this._log?.debug( `Creating wrapper: [${target ?? 'Unknown target'}] [${options?.token ?? "Unknown Token"}]` );
+                            const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<any, any>( target, options );
+                            wrapper.injectable = true;
+
+                            registry.modules().set( wrapper.name(), wrapper );
+                     }
+                     catch ( error )
+                     {
+                            this._log?.error( `Context Create Error: [${error.message}]` );
+                     }
+              }
+
+              return new ApplicationContext( registry, resolver );
        }
 
        /**
@@ -190,12 +252,29 @@ export class Reflector
        {
               try
               {
+                     if ( Reflector._ready === true )
+                     {
+                            return true;
+                     }
+
+                     Reflector._ready = true;
+
                      if ( !Reflector._log )
                      {
-                            Reflector._log = new LogService( {
-                                   title: "Reflect",
-                                   level: "verbose"
-                            } );
+                            let logEnv: string = process.env[ GEEKO_META_LOGGER_LEVEL ];
+
+                            if ( logEnv !== "0" && logEnv !== "disable" )
+                            {
+                                   if ( logEnv === "1" || logEnv === "true" )
+                                   {
+                                          logEnv = "info";
+                                   }
+
+                                   Reflector._log = new LogService( {
+                                          level: ( logEnv as LogLevel ) ?? "verbose",
+                                          title: "Reflect"
+                                   } );
+                            }
                      }
 
                      if ( !Reflector._registry )

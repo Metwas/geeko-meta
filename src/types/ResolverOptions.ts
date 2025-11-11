@@ -22,21 +22,11 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
-import { Type } from "../types";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
 /**
- * Creates a new @see ModuleWrapper instance from the provided @see Type<T> target
+ * @see IResolver options
  * 
  * @public
- * @param {Type<T>} target 
- * @returns {IModuleWrapper<I, T>}
  */
-export const wrap = <I, T>( target: Type<T> ): IModuleWrapper<I, T> =>
-{
-       return new ModuleWrapper( target );
+export type ResolverOptions = {
+       singleton?: boolean;
 };

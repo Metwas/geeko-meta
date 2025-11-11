@@ -55,31 +55,6 @@ export class ApplicationContext
         */
        public get<T>( target: InjectionToken | Type<T> ): T
        {
-              return void 0;
-       }
-
-       /**
-        * Gets all modules of @see T from the specified injectable token
-        * 
-        * @public 
-        * @param {InjectionToken} inject 
-        * @returns {Array<T>}
-        */
-       public getAll<T>( inject: InjectionToken ): Array<T>
-       {
-              return void 0;
-       }
-
-       /**
-        * Gets the specified property on the given @see Injectable target
-        * 
-        * @public 
-        * @param {InjectionToken} key
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {Unknown}
-        */
-       public getProperty<T>( key: InjectionToken, target: InjectionToken | Type<T> ): any
-       {
-              return void 0;
+              return this.resolver.resolve( target, this.registry );
        }
 }

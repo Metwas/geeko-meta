@@ -26,7 +26,7 @@
 
 import { InjectionToken, PropertyMap } from "../../types";
 import { IModuleRegistry } from "./IModuleRegistry";
-import { IModuleWrapper } from "../ModuleWrapper";
+import { ModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -36,18 +36,18 @@ import { IModuleWrapper } from "../ModuleWrapper";
 export class ModuleRegistry implements IModuleRegistry
 {
        /**
-        * Contains all injectable @see IModuleWrapper instances
+        * Contains all injectable @see ModuleWrapper instances
         * 
         * @private
-        * @type {Map<InjectionToken, IModuleWrapper<any, any>>}
+        * @type {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
-       private _modules: Map<InjectionToken, IModuleWrapper<any, any>> = new Map<InjectionToken, IModuleWrapper<any, any>>();
+       private _modules: Map<InjectionToken, ModuleWrapper<any, any>> = new Map<InjectionToken, ModuleWrapper<any, any>>();
 
        /**
         * @see Inject property graph
         * 
         * @private
-        * @type {Map<InjectionToken, IModuleWrapper<any, any>>}
+        * @type {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
        private _properties: Map<InjectionToken, Array<PropertyMap<any>>> = new Map<InjectionToken, Array<PropertyMap<any>>>();
 
@@ -55,17 +55,17 @@ export class ModuleRegistry implements IModuleRegistry
         * Contains all injectable @see InjectionToken references
         * 
         * @private
-        * @type {Map<InjectionToken, IModuleWrapper<any, any>>}
+        * @type {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
        private _injectables: Map<InjectionToken, Array<InjectionToken>> = new Map<InjectionToken, Array<InjectionToken>>();
 
        /**
-        * Contains all injectable @see IModuleWrapper instances
+        * Contains all injectable @see ModuleWrapper instances
         * 
         * @public
-        * @returns {Map<InjectionToken, IModuleWrapper<any, any>>}
+        * @returns {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
-       public modules(): Map<InjectionToken, IModuleWrapper<any, any>>
+       public modules(): Map<InjectionToken, ModuleWrapper<any, any>>
        {
               return this._modules;
        }

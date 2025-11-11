@@ -24,9 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectionToken } from "./Injectable";
+import { LogService } from "@geeko/log";
 import { Provider } from "./Provider";
-import { Type } from "./Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -36,6 +35,6 @@ import { Type } from "./Type";
  * @public
  */
 export type ModuleContext = {
-       imports: Array<Type<any>> | Array<InjectionToken>;
        providers: Array<Provider<any>>;
+       logger?: LogService;
 };
