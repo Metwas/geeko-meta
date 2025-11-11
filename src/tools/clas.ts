@@ -1,6 +1,6 @@
-import { SetMetadata } from "./SetMetadata";
-import { Injectable } from "./Injectable";
-import { Inject } from "./Inject";
+import { SetMetadata } from "../decorators/SetMetadata";
+import { Injectable } from "../decorators/Injectable";
+import { Inject } from "../decorators/Inject";
 
 @Injectable( "Injected_D" )
 class D
@@ -18,7 +18,7 @@ class B
 }
 
 @Injectable()
-class C
+export class C
 {
        public constructor( public b: B ) { }
 
