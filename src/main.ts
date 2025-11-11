@@ -38,3 +38,5 @@ export * from "./interfaces/Reflector";
 export * from "./global/environment";
 export * from "./decorators";
 export * from "./types";
+
+export * from "./tools/clas";

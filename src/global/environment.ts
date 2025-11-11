@@ -37,6 +37,14 @@ import { env } from "node:process";
 export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
 
 /**
+ * Geeko logger level flag
+ * 
+ * @public
+ * @type {String}
+ */
+export const GEEKO_META_LOGGER_LEVEL: string = "GEEKO_META_LOGGER_LEVEL";
+
+/**
  * @public
  * @type {Boolean}
  */

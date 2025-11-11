@@ -25,7 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { InjectionToken, PropertyMap } from "../../types";
-import { IModuleWrapper } from "../ModuleWrapper";
+import { ModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -35,12 +35,12 @@ import { IModuleWrapper } from "../ModuleWrapper";
 export interface IModuleRegistry
 {
        /**
-        * Contains all injectable @see IModuleWrapper instances
+        * Contains all injectable @see ModuleWrapper instances
         * 
         * @public
-        * @returns {Map<InjectionToken, IModuleWrapper<any, any>>}
+        * @returns {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
-       modules(): Map<InjectionToken, IModuleWrapper<any, any>>;
+       modules(): Map<InjectionToken, ModuleWrapper<any, any>>;
 
        /**
         * @see Inject property graph

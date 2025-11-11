@@ -25,8 +25,8 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
-import { IModuleWrapper, ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { AUTO_INJECT_ENABLED } from "../global/environment";
+import { ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { MetadataOptions } from "../types/MetadataOptions";
 import { Reflector } from "../interfaces/Reflector";
 import { InjectionToken } from "../types";
@@ -65,7 +65,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: 
                      return descriptor;
               }
 
-              const wrapper: IModuleWrapper<T> = new ModuleWrapper( target, options );
+              const wrapper: ModuleWrapper<any, T> = new ModuleWrapper( target, options );
               wrapper.injectable = options?.injectable;
 
               if ( options?.useValue )

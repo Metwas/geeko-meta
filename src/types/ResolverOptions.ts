@@ -22,6 +22,11 @@
      SOFTWARE.
 */
 
-export * from "./SetMetadata";
-export * from "./Injectable";
-export * from "./Inject";
+/**
+ * @see IResolver options
+ * 
+ * @public
+ */
+export type ResolverOptions = {
+       singleton?: boolean;
+};

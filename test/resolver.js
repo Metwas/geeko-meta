@@ -1,12 +1,11 @@
-const { Reflector, Test } = require('../dist/main');
+const { Reflector, Test, C } = require('../dist/main');
 
 const test = Reflector.get(Test);
 
 /** @TODO: resolve from @see ModuleContext  */
-const context = Reflector.getContext({
-       providers: [],
-       import: []
+const context = Reflector.createApplicationContext({
+       providers: [ Test, C ],
 });
 
-console.log(test);
+console.log(context.get(Test));
 // test.request();
