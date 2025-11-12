@@ -178,6 +178,48 @@ export class Reflector
        }
 
        /**
+        * Gets all @see ModuleWrapper(s) from the given @see Injectable key
+        * 
+        * @public
+        * @param {InjectionToken} key 
+        * @returns {Array<unknown>}
+        */
+       public static getModules( key: InjectionToken ): Array<unknown>
+       {
+              const injectables: Map<InjectionToken, Array<InjectionToken>> = Reflector._registry.injectables();
+
+              if ( injectables && injectables.has( key ) )
+              {
+                     const tokens: Array<InjectionToken> = injectables.get( key );
+                     const targets: Array<unknown> = [];
+
+                     const length: number = tokens.length;
+                     let index: number = 0;
+
+                     for ( ; index < length; ++index )
+                     {
+                            const token: InjectionToken = tokens[ index ];
+
+                            if ( !key )
+                            {
+                                   continue;
+                            }
+
+                            const target: unknown = Reflector.get( token );
+
+                            if ( target )
+                            {
+                                   targets.push( target );
+                            }
+                     }
+
+                     return targets;
+              }
+
+              return void 0;
+       }
+
+       /**
         * Resolves a new @see ApplicationContext based on the given @see ModuleContext options
         * 
         * @public
