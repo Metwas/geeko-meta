@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,19 +24,18 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectionToken, PropertyMap } from "../../types";
-import { ModuleWrapper } from "../ModuleWrapper";
+import { InjectionToken, PropertyMap } from '../../types';
+import { ModuleWrapper } from '../ModuleWrapper';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * @public
  */
-export interface IModuleRegistry
-{
+export interface IModuleRegistry {
        /**
         * Contains all injectable @see ModuleWrapper instances
-        * 
+        *
         * @public
         * @returns {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
@@ -44,7 +43,7 @@ export interface IModuleRegistry
 
        /**
         * @see Inject property graph
-        * 
+        *
         * @public
         * @returns {Map<InjectionToken, Array<PropertyMap>>}
         */
@@ -52,7 +51,7 @@ export interface IModuleRegistry
 
        /**
         * Contains all injectable @see InjectionToken references
-        * 
+        *
         * @public
         * @returns {Map<InjectionToken, Array<InjectionToken>>}
         */

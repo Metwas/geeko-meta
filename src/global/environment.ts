@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,25 +24,25 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { env } from "node:process";
+import { env } from 'node:process';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * Global environment variable to declare if automatic injection is enabled
- * 
+ *
  * @public
  * @type {String}
  */
-export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
+export const ENV_GEEKO_AUTO_INJECT: string = 'GEEKO_AUTO_INJECT';
 
 /**
  * Geeko logger level flag
- * 
+ *
  * @public
  * @type {String}
  */
-export const GEEKO_META_LOGGER_LEVEL: string = "GEEKO_META_LOGGER_LEVEL";
+export const GEEKO_META_LOGGER_LEVEL: string = 'GEEKO_META_LOGGER_LEVEL';
 
 /**
  * @public
@@ -52,16 +52,15 @@ let ENV_AUTO_INJECT_ENABLED: boolean = void 0;
 
 /**
  * Checks if the automatic injection @see Injectable is enabled
- * 
+ *
  * @public
  * @returns {Boolean}
  */
-export const AUTO_INJECT_ENABLED = function (): boolean
-{
-       if ( !ENV_AUTO_INJECT_ENABLED )
-       {
+export const AUTO_INJECT_ENABLED = function (): boolean {
+       if (!ENV_AUTO_INJECT_ENABLED) {
               /** Default to enabled if undefined */
-              return ENV_AUTO_INJECT_ENABLED = env[ ENV_GEEKO_AUTO_INJECT ] === "0" ? false : true;
+              return (ENV_AUTO_INJECT_ENABLED =
+                     env[ENV_GEEKO_AUTO_INJECT] === '0' ? false : true);
        }
 
        return ENV_AUTO_INJECT_ENABLED;

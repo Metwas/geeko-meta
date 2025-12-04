@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,60 +24,64 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
-import { AUTO_INJECT_ENABLED } from "../global/environment";
-import { ModuleWrapper } from "../interfaces/ModuleWrapper";
-import { MetadataOptions } from "../types/MetadataOptions";
-import { Reflector } from "../interfaces/Reflector";
-import { InjectionToken } from "../types";
-import { Type } from "../types/Type";
+import { CustomDecorator, CustomTrackDecorator } from '../types/Decorators';
+import { AUTO_INJECT_ENABLED } from '../global/environment';
+import { ModuleWrapper } from '../interfaces/ModuleWrapper';
+import { MetadataOptions } from '../types/MetadataOptions';
+import { Reflector } from '../interfaces/Reflector';
+import { InjectionToken } from '../types';
+import { Type } from '../types/Type';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * Sets metadata on a given class OR function.
- * 
+ *
  * @public
- * @param {T} metadataKey 
+ * @param {T} metadataKey
  * @param {V} metadataValue
  * @param {MetadataOptions} options
- * @returns {CustomDecorator<T>} 
+ * @returns {CustomDecorator<T>}
  */
-export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: K, metadataValue: V, options?: MetadataOptions ): CustomDecorator<K> =>
-{
-       const factory = <I extends Object, T = Type>( target: any, key?: any, descriptor?: any ): void =>
-       {
-              if ( AUTO_INJECT_ENABLED() === false )
-              {
+export const SetMetadata = <K = string | InjectionToken, V = any>(
+       metadataKey: K,
+       metadataValue: V,
+       options?: MetadataOptions,
+): CustomDecorator<K> => {
+       const factory = <I extends Object, T = Type>(
+              target: any,
+              key?: any,
+              descriptor?: any,
+       ): void => {
+              if (AUTO_INJECT_ENABLED() === false) {
                      return void 0;
               }
 
               /** Method within as class or object will define the @see descriptor */
-              if ( descriptor )
-              {
-                     Reflector.registryProperty( {
+              if (descriptor) {
+                     Reflector.registryProperty({
                             token: metadataKey as InjectionToken,
                             target: target?.constructor,
                             key: descriptor.value?.name,
                             metadata: metadataValue,
-                     } );
+                     });
 
                      return descriptor;
               }
 
-              const wrapper: ModuleWrapper<any, T> = new ModuleWrapper( target, options );
+              const wrapper: ModuleWrapper<any, T> = new ModuleWrapper(
+                     target,
+                     options,
+              );
               wrapper.injectable = options?.injectable;
 
-              if ( options?.useValue )
-              {
+              if (options?.useValue) {
                      wrapper.useValue = options?.useValue;
-              }
-              else if ( typeof options?.useFactory === "function" )
-              {
+              } else if (typeof options?.useFactory === 'function') {
                      wrapper.useFactory = options?.useFactory;
               }
 
-              Reflector.register( metadataKey as string, wrapper );
+              Reflector.register(metadataKey as string, wrapper);
        };
 
        factory.KEY = metadataKey;
@@ -86,24 +90,31 @@ export const SetMetadata = <K = string | InjectionToken, V = any>( metadataKey: 
 
 /**
  * Helper for setting the metadata for a given method parameter
- * 
+ *
  * @public
  * @param {T} metadataKey
  * @param {V} parameter
  * @returns {ParameterDecorator & CustomTrackDecorator<T>}
  */
-export const SetParameter = <T, V>( metadataKey: T, parameter: Partial<V> ): ParameterDecorator & CustomTrackDecorator<T> =>
-{
-       const factory = ( target: object, propertyKey: string | symbol, paramIndex: number ): void =>
-       {
-              const params = Reflect.getMetadata( metadataKey, target[ propertyKey ] ) ?? [];
+export const SetParameter = <T, V>(
+       metadataKey: T,
+       parameter: Partial<V>,
+): ParameterDecorator & CustomTrackDecorator<T> => {
+       const factory = (
+              target: object,
+              propertyKey: string | symbol,
+              paramIndex: number,
+       ): void => {
+              const params =
+                     Reflect.getMetadata(metadataKey, target[propertyKey]) ??
+                     [];
 
-              params.push( {
+              params.push({
                      index: paramIndex,
                      ...parameter,
-              } );
+              });
 
-              Reflect.defineMetadata( metadataKey, params, target[ propertyKey ] );
+              Reflect.defineMetadata(metadataKey, params, target[propertyKey]);
        };
 
        factory.KEY = metadataKey;

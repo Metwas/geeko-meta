@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,26 +24,32 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { InjectableOptions } from "../types/Injectable";
-import { CustomDecorator } from "../types/Decorators";
-import { SetMetadata } from "./SetMetadata";
-import { MetadataOptions } from "../types";
+import { INJECTABLE_TOKEN_KEY } from '../global/injection/inject.tokens';
+import { InjectableOptions } from '../types/Injectable';
+import { CustomDecorator } from '../types/Decorators';
+import { SetMetadata } from './SetMetadata';
+import { MetadataOptions } from '../types';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * Sets a @see ClassDecorator to injectable.
- * 
+ *
  * @public
  * @param {InjectableOptions | String} options
- * @returns {CustomDecorator<T>} 
+ * @returns {CustomDecorator<T>}
  */
-export const Injectable = ( options?: string | InjectableOptions ): CustomDecorator =>
-{
-       let metadata: MetadataOptions = Object.assign( typeof options === "string" ? { token: options } : ( options ?? {} ), {
-              injectable: true,
-       } );
+export const Injectable = (
+       options?: string | InjectableOptions,
+): CustomDecorator => {
+       let metadata: MetadataOptions = Object.assign(
+              typeof options === 'string'
+                     ? { token: options }
+                     : (options ?? {}),
+              {
+                     injectable: true,
+              },
+       );
 
-       return SetMetadata( INJECTABLE_TOKEN_KEY, true, metadata );
+       return SetMetadata(INJECTABLE_TOKEN_KEY, true, metadata);
 };
