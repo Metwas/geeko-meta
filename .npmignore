@@ -6,6 +6,7 @@
 /assets
 /node_modules
 .cache
+.ts-cache
 tsconfig.build.json
 tsconfig.json
 package-lock.json
