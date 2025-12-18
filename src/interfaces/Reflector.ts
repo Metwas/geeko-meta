@@ -183,7 +183,7 @@ export class Reflector {
         * @param {InjectionToken} key
         * @returns {Array<unknown>}
         */
-       public static getModules(key: InjectionToken): Array<unknown> {
+       public static getFor(key: InjectionToken): Array<unknown> {
               const injectables: Map<
                      InjectionToken,
                      Array<InjectionToken>
