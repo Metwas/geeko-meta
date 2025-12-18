@@ -1,11 +1,11 @@
 {
        "name": "geeko-meta",
-       "version": "1.0.2",
+       "version": "1.0.3",
        "description": "Geeko metadata library for decorators & dependency injection",
        "main": "./dist/main.js",
        "scripts": {
               "build": "rm -rf ./dist && tsc -p ./tsconfig.json",
-              "test": "echo \"Error: no test specified\" && exit 1"
+              "test": "tsc --noEmit && tsx --tsconfig ./tsconfig.test.json --test test/**/*.test.ts"
        },
        "author": "Metwas",
        "license": "MIT",
@@ -14,7 +14,8 @@
               "reflect-metadata": "^0.2.2"
        },
        "devDependencies": {
-              "@types/node": "^24.10.1",
+              "@types/node": "^24.10.4",
+              "tsx": "^4.21.0",
               "typescript": "^5.9.3"
        }
 }
