@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,24 +24,26 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleRegistry } from "../registry/IModuleRegistry";
-import { InjectionToken, Type } from "../../types";
+import { IModuleRegistry } from '../registry/IModuleRegistry';
+import { InjectionToken, Type } from '../../types';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * Core @see IModuleWrapper resolver interface
- * 
- * @public 
+ *
+ * @public
  */
-export interface IResolver
-{
+export interface IResolver {
        /**
         * Resolves the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
-        * 
-        * @public 
-        * @param {InjectionToken | Type<T>} token 
-        * @param {IModuleRegistry} registry 
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @param {IModuleRegistry} registry
         */
-       resolve<T>( token: InjectionToken | Type<T>, registry: IModuleRegistry ): T;
+       resolve<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+       ): T;
 }

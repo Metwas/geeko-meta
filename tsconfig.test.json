@@ -2,7 +2,7 @@
        "compilerOptions": {
               "module": "nodenext",
               "target": "esnext",
-              "outDir": ".cache",
+              "outDir": ".ts-cache",
               "lib": ["ESNext"],
               "removeComments": true,
               "declaration": true,

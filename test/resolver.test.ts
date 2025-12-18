@@ -27,7 +27,7 @@
 import { describe, it } from 'node:test';
 import { Reflector } from '../src/main';
 import assert from 'node:assert/strict';
-import { Test } from './TestClass';
+import { Test } from './dependancies';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

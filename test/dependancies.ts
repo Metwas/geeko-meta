@@ -24,30 +24,24 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { SetMetadata, Injectable, Inject } from '../src/main';
+import {
+       SetMetadata,
+       Injectable,
+       Inject,
+       InjectableOptions,
+       CustomDecorator,
+       MetadataOptions,
+} from '../src/main';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-@Injectable('Injected_D')
-class D {
-       public name: string = 'D';
-}
-
-@Injectable()
-class B {
-       public hello() {
-              return 'Hello from B';
-       }
-}
-
-@Injectable()
-export class C {
-       public constructor(public b: B) {}
-
-       public hello() {
-              return 'Hello from C';
-       }
-}
+/**
+ * Used to reference a custom @see SetMetadata injector token
+ *
+ * @public
+ * @type {String}
+ */
+export const ENCODER_INJECTABLE_TOKEN: string = 'ENCODER_INJECTABLE_TOKEN';
 
 /**
  * @public
@@ -55,6 +49,44 @@ export class C {
 export interface Encoder {
        encode(value: any): string;
        decode(value: string): any;
+}
+
+/**
+ * Custom @see Encoder based injection declaration.
+ *
+ * @public
+ * @param {InjectableOptions | String} options
+ * @returns {CustomDecorator<T>}
+ */
+export const Encoding = (
+       options?: string | InjectableOptions,
+): CustomDecorator => {
+       let metadata: MetadataOptions = Object.assign(
+              typeof options === 'string'
+                     ? { token: options }
+                     : (options ?? {}),
+              {
+                     injectable: true,
+              },
+       );
+
+       return SetMetadata(ENCODER_INJECTABLE_TOKEN, true, metadata);
+};
+
+/**
+ * Custom hex encoder definition
+ *
+ * @public
+ */
+@Encoding('hex')
+export class HexEncoder implements Encoder {
+       encode(value: any): string {
+              return '0x00';
+       }
+
+       decode(value: string): any {
+              return '0x01';
+       }
 }
 
 /**
