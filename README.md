@@ -90,7 +90,7 @@ const instance: Test = context.get(Test);
 ### Custom Injectables
 Below is an example of how to create a custom injectable using the **SetMetadata**: 
 ```typescript
-import { SetMetadata } from '@geeko/meta';
+import { SetMetadata, CustomDecorator, MetadataOptions } from '@geeko/meta';
 
 /**
  * Custom @see Encoder based injection declaration.
