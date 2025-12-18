@@ -81,7 +81,7 @@ const instance: Test = context.get(Test);
 ```
 **Note:** By default the resolver will automatically collect metadata ready for injection on startup, however, if you wish to only use the 'createApplicationContext' method, you can disable the automatic resolver by setting the following process environment variable **GEEKO_AUTO_INJECT**  to **0**, e.g:
 ```sh
- set GEEKO_AUTO_INJECT 0 node ./test/resolver.js
+ set GEEKO_AUTO_INJECT 0 node ./app.js
 ```
 Logging can also be disabled by setting the process environment variable **GEEKO_META_LOGGER_LEVEL** to **0**
 ## Installation
