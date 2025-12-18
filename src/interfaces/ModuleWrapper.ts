@@ -43,10 +43,10 @@ export class ModuleWrapper<I, T> {
         * @param {InjectableOptions} options
         */
        public constructor(target: Type<T>, options?: InjectableOptions) {
-              this._target = target;
-              this._token = options?.token;
               this.useFactory = options?.useFactory;
               this.useValue = options?.useValue;
+              this._token = options?.token;
+              this._target = target;
        }
 
        /**

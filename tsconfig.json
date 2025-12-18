@@ -3,20 +3,12 @@
               "module": "nodenext",
               "target": "esnext",
               "outDir": "dist",
-              "lib": [
-                     "ESNext"
-              ],
+              "lib": ["ESNext"],
               "removeComments": true,
               "declaration": true,
               "emitDecoratorMetadata": true,
               "experimentalDecorators": true,
        },
-       "exclude": [
-              "node_modules",
-              "dist",
-              "build"
-       ],
-       "include": [
-              "src",
-       ],
+       "exclude": ["node_modules", "dist", "build"],
+       "include": ["src"],
 }
