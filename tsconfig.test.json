@@ -1,0 +1,14 @@
+{
+       "compilerOptions": {
+              "module": "nodenext",
+              "target": "esnext",
+              "outDir": ".cache",
+              "lib": ["ESNext"],
+              "removeComments": true,
+              "declaration": true,
+              "emitDecoratorMetadata": true,
+              "experimentalDecorators": true,
+       },
+       "exclude": ["node_modules", "dist", "build"],
+       "include": ["test"],
+}
