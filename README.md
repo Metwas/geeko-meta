@@ -1,4 +1,5 @@
 # Geeko Meta 
+![image](./assets/banner-geeko-meta.png)
 ## _Simple dependancy injection library written for Typescript_
 
 [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
