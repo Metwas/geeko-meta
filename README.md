@@ -10,6 +10,8 @@
 #
 - [Auto Resolve](#Resolve)
 - [Create Application Context](#Application-Context)
+- [Custom Injectables](#Custom-Injectables)
+- [Get Specific Injectables](#Get-Specific-Injectables)
 - [Installation](#Installation)
 #
 #
