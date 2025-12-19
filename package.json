@@ -1,10 +1,11 @@
 {
-       "name": "geeko-meta",
+       "name": "@geeko/meta",
        "version": "1.1.0",
        "description": "Geeko metadata library for decorators & dependency injection",
        "main": "./dist/main.js",
        "scripts": {
               "build": "rm -rf ./dist && tsc -p ./tsconfig.json",
+              "pub": "npm run build && npm publish --access=public",
               "test:tsc": "rm -rf ./.ts-cache && tsc -p ./tsconfig.test.json",
               "test": "npm run test:tsc && node --test ./.ts-cache/**/*.test.js"
        },
