@@ -24,12 +24,12 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectionToken, PropertyMap, Type } from '../../types';
-import { ResolverOptions } from '../../types/ResolverOptions';
-import { IModuleRegistry } from '../registry/IModuleRegistry';
-import { ModuleWrapper } from '../ModuleWrapper';
-import { LogService } from '@geeko/log';
-import { IResolver } from './IResolver';
+import { InjectionToken, PropertyMap, Type } from "../../types";
+import { ResolverOptions } from "../../types/ResolverOptions";
+import { IModuleRegistry } from "../registry/IModuleRegistry";
+import { ModuleWrapper } from "../ModuleWrapper";
+import { LogService } from "@geeko/log";
+import { IResolver } from "./IResolver";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -60,7 +60,7 @@ export class DefaultResolver implements IResolver {
        ): T {
               try {
                      const name: string =
-                            typeof token === 'function' ? token?.name : token;
+                            typeof token === "function" ? token?.name : token;
 
                      if (!registry || !name) {
                             return void 0;
@@ -91,7 +91,7 @@ export class DefaultResolver implements IResolver {
                      }
 
                      const dependancies: Array<any> = Reflect.getMetadata(
-                            'design:paramtypes',
+                            "design:paramtypes",
                             mtarget,
                      );
                      const propertyMap: Array<PropertyMap<T>> = properties.get(
@@ -146,7 +146,7 @@ export class DefaultResolver implements IResolver {
                                           (isInjected && !_resolved)
                                    ) {
                                           this.log?.warn(
-                                                 `Unable to resolve dependancy ${lastToken ? '[' + lastToken + '] ' : ''}[${type}]`,
+                                                 `Unable to resolve dependancy ${lastToken ? "[" + lastToken + "] " : ""}[${type}]`,
                                           );
                                    }
 
@@ -156,7 +156,7 @@ export class DefaultResolver implements IResolver {
 
                      if (module.useValue) {
                             instance = module.useValue;
-                     } else if (typeof module.useFactory === 'function') {
+                     } else if (typeof module.useFactory === "function") {
                             instance = module.useFactory();
                      } else {
                             instance = new mtarget(...resolved);
@@ -170,7 +170,7 @@ export class DefaultResolver implements IResolver {
                                    propertyMap[pindex];
 
                             /** Only resolve property.key */
-                            if (typeof property.key === 'string') {
+                            if (typeof property.key === "string") {
                                    const resolved: any = this.resolve(
                                           property.token,
                                           registry,

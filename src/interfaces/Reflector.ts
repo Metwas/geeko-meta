@@ -24,19 +24,19 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from '../types/Injectable';
-import { GEEKO_META_LOGGER_LEVEL } from '../global/environment';
-import { DefaultResolver } from './resolvers/DefaultResolver';
-import { IModuleRegistry } from './registry/IModuleRegistry';
-import { ModuleRegistry } from './registry/ModuleRegistry';
-import { ApplicationContext } from './ApplicationContext';
-import { PropertyMap } from '../types/PropertyMap';
-import { LogLevel, LogService } from '@geeko/log';
-import { IResolver } from './resolvers/IResolver';
-import { ModuleContext } from '../types/Context';
-import { ModuleWrapper } from './ModuleWrapper';
-import { Provider } from '../types/Provider';
-import { Type } from '../types/Type';
+import { InjectableOptions, InjectionToken } from "../types/Injectable";
+import { GEEKO_META_LOGGER_LEVEL } from "../global/environment";
+import { DefaultResolver } from "./resolvers/DefaultResolver";
+import { IModuleRegistry } from "./registry/IModuleRegistry";
+import { ModuleRegistry } from "./registry/ModuleRegistry";
+import { ApplicationContext } from "./ApplicationContext";
+import { PropertyMap } from "../types/PropertyMap";
+import { LogLevel, LogService } from "@geeko/log";
+import { IResolver } from "./resolvers/IResolver";
+import { ModuleContext } from "../types/Context";
+import { ModuleWrapper } from "./ModuleWrapper";
+import { Provider } from "../types/Provider";
+import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -226,7 +226,7 @@ export class Reflector {
        public static createApplicationContext(
               context: ModuleContext,
        ): ApplicationContext {
-              if (!context || typeof context !== 'object') {
+              if (!context || typeof context !== "object") {
                      return void 0;
               }
 
@@ -253,7 +253,7 @@ export class Reflector {
 
                      if (
                             typeof (provider as InjectableOptions)?.token ===
-                            'string'
+                            "string"
                      ) {
                             options = {
                                    useFactory: (provider as InjectableOptions)
@@ -267,15 +267,15 @@ export class Reflector {
                      }
 
                      this._log?.debug(
-                            `Creating wrapper: [${target ?? 'Unknown target'}] [${options?.token ?? 'Unknown Token'}]`,
+                            `Creating wrapper: [${target ?? "Unknown target"}] [${options?.token ?? "Unknown Token"}]`,
                      );
 
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
                             any
                      >(target, options);
-                     wrapper.injectable = true;
 
+                     wrapper.injectable = true;
                      registry.modules().set(wrapper.name(), wrapper);
               }
 
@@ -300,16 +300,16 @@ export class Reflector {
                             let logEnv: string =
                                    process.env[GEEKO_META_LOGGER_LEVEL];
 
-                            if (logEnv !== '0' && logEnv !== 'disable') {
-                                   if (logEnv === '1' || logEnv === 'true') {
-                                          logEnv = 'info';
+                            if (logEnv !== "0" && logEnv !== "disable") {
+                                   if (logEnv === "1" || logEnv === "true") {
+                                          logEnv = "info";
                                    }
 
                                    Reflector._log = new LogService({
                                           level:
                                                  (logEnv as LogLevel) ??
-                                                 'verbose',
-                                          title: 'Reflect',
+                                                 "verbose",
+                                          title: "Reflect",
                                    });
                             }
                      }

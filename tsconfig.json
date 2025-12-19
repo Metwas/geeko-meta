@@ -7,8 +7,8 @@
               "removeComments": true,
               "declaration": true,
               "emitDecoratorMetadata": true,
-              "experimentalDecorators": true,
+              "experimentalDecorators": true
        },
        "exclude": ["node_modules", "dist", "build"],
-       "include": ["src"],
+       "include": ["src"]
 }

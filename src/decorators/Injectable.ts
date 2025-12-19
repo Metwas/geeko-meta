@@ -24,11 +24,11 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { INJECTABLE_TOKEN_KEY } from '../global/injection/inject.tokens';
-import { InjectableOptions } from '../types/Injectable';
-import { CustomDecorator } from '../types/Decorators';
-import { SetMetadata } from './SetMetadata';
-import { MetadataOptions } from '../types';
+import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
+import { InjectableOptions } from "../types/Injectable";
+import { CustomDecorator } from "../types/Decorators";
+import { SetMetadata } from "./SetMetadata";
+import { MetadataOptions } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -43,7 +43,7 @@ export const Injectable = (
        options?: string | InjectableOptions,
 ): CustomDecorator => {
        let metadata: MetadataOptions = Object.assign(
-              typeof options === 'string'
+              typeof options === "string"
                      ? { token: options }
                      : (options ?? {}),
               {

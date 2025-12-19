@@ -24,9 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IModuleRegistry } from './registry/IModuleRegistry';
-import { IResolver } from './resolvers/IResolver';
-import { InjectionToken, Type } from '../types';
+import { IModuleRegistry } from "./registry/IModuleRegistry";
+import { IResolver } from "./resolvers/IResolver";
+import { InjectionToken, Type } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

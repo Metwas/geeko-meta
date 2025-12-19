@@ -24,8 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectionToken, PropertyMap } from '../../types';
-import { ModuleWrapper } from '../ModuleWrapper';
+import { InjectionToken, PropertyMap } from "../../types";
+import { ModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

@@ -24,21 +24,21 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { describe, it } from 'node:test';
-import { Reflector } from '../src/main';
-import assert from 'node:assert/strict';
-import { Test } from './dependancies';
+import { describe, it } from "node:test";
+import { Reflector } from "../src/main";
+import assert from "node:assert/strict";
+import { Test } from "./dependancies";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 const instance: Test = Reflector.get(Test);
 
-describe('Auto inject for [TestClass]', () => {
-       it('Instance OK ?', () => {
-              assert.ok(instance.constructor.name === 'Test');
+describe("Auto inject for [TestClass]", () => {
+       it("Instance OK ?", () => {
+              assert.ok(instance.constructor.name === "Test");
        });
 
-       it('Subclass Instance OK ?', () => {
-              assert.ok(typeof instance?.encoder?.encode === 'function');
+       it("Subclass Instance OK ?", () => {
+              assert.ok(typeof instance?.encoder?.encode === "function");
        });
 });

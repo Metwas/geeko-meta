@@ -31,7 +31,7 @@ import {
        InjectableOptions,
        CustomDecorator,
        MetadataOptions,
-} from '../src/main';
+} from "../src/main";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -41,7 +41,7 @@ import {
  * @public
  * @type {String}
  */
-export const ENCODER_INJECTABLE_TOKEN: string = 'ENCODER_INJECTABLE_TOKEN';
+export const ENCODER_INJECTABLE_TOKEN: string = "ENCODER_INJECTABLE_TOKEN";
 
 /**
  * @public
@@ -62,7 +62,7 @@ export const Encoding = (
        options?: string | InjectableOptions,
 ): CustomDecorator => {
        let metadata: MetadataOptions = Object.assign(
-              typeof options === 'string'
+              typeof options === "string"
                      ? { token: options }
                      : (options ?? {}),
               {
@@ -78,14 +78,14 @@ export const Encoding = (
  *
  * @public
  */
-@Encoding('hex')
+@Encoding("hex")
 export class HexEncoder implements Encoder {
        encode(value: any): string {
-              return '0x00';
+              return "0x00";
        }
 
        decode(value: string): any {
-              return '0x01';
+              return "0x01";
        }
 }
 
@@ -94,7 +94,7 @@ export class HexEncoder implements Encoder {
  *
  * @public
  */
-@Injectable('JSON_ENCODER')
+@Injectable("JSON_ENCODER")
 export class JsonEncoder implements Encoder {
        encode(value: any): string {
               return JSON.stringify(value);
@@ -116,5 +116,5 @@ export class Test {
         * @public
         * @param {Encoder} encoder
         */
-       public constructor(@Inject('JSON_ENCODER') public encoder: Encoder) {}
+       public constructor(@Inject("JSON_ENCODER") public encoder: Encoder) {}
 }

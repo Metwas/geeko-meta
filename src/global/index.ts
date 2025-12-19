@@ -22,5 +22,5 @@
      SOFTWARE.
 */
 
-export * from './injection/inject.tokens';
-export * from './environment';
+export * from "./injection/inject.tokens";
+export * from "./environment";

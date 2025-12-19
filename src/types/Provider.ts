@@ -24,8 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from './Injectable';
-import { Type } from './Type';
+import { InjectableOptions, InjectionToken } from "./Injectable";
+import { Type } from "./Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

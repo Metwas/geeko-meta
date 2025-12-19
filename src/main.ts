@@ -24,17 +24,17 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import 'reflect-metadata';
+import "reflect-metadata";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-export * from './interfaces/resolvers/DefaultResolver';
-export * from './interfaces/registry/IModuleRegistry';
-export * from './interfaces/registry/ModuleRegistry';
-export * from './interfaces/resolvers/IResolver';
-export * from './interfaces/ApplicationContext';
-export * from './interfaces/ModuleWrapper';
-export * from './interfaces/Reflector';
-export * from './decorators';
-export * from './global';
-export * from './types';
+export * from "./interfaces/resolvers/DefaultResolver";
+export * from "./interfaces/registry/IModuleRegistry";
+export * from "./interfaces/registry/ModuleRegistry";
+export * from "./interfaces/resolvers/IResolver";
+export * from "./interfaces/ApplicationContext";
+export * from "./interfaces/ModuleWrapper";
+export * from "./interfaces/Reflector";
+export * from "./decorators";
+export * from "./global";
+export * from "./types";

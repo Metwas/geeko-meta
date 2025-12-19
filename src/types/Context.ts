@@ -24,8 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { LogService } from '@geeko/log';
-import { Provider } from './Provider';
+import { LogService } from "@geeko/log";
+import { Provider } from "./Provider";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

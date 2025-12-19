@@ -28,7 +28,7 @@
  * @public
  * @type {String}
  */
-export const PROPERTY_INJECT_TOKEN: string = 'CLASS_PROPERTY_TOKEN';
+export const PROPERTY_INJECT_TOKEN: string = "CLASS_PROPERTY_TOKEN";
 
 /**
  * Contructor or Method parameter injection token
@@ -36,7 +36,7 @@ export const PROPERTY_INJECT_TOKEN: string = 'CLASS_PROPERTY_TOKEN';
  * @public
  * @type {String}
  */
-export const PARAMETER_INJECT_TOKEN: string = 'METHOD_PARAMETER_TOKEN';
+export const PARAMETER_INJECT_TOKEN: string = "METHOD_PARAMETER_TOKEN";
 
 /**
  * @see Injectable metadata token key
@@ -44,4 +44,4 @@ export const PARAMETER_INJECT_TOKEN: string = 'METHOD_PARAMETER_TOKEN';
  * @public
  * @type {String}
  */
-export const INJECTABLE_TOKEN_KEY: string = 'INJECTABLE_TOKEN_KEY';
+export const INJECTABLE_TOKEN_KEY: string = "INJECTABLE_TOKEN_KEY";

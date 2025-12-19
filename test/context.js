@@ -29,7 +29,7 @@ const {
        Test,
        INJECTABLE_TOKEN_KEY,
        ApplicationContext,
-} = require('../dist/main');
+} = require("../dist/main");
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

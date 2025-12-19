@@ -24,13 +24,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { CustomDecorator, CustomTrackDecorator } from '../types/Decorators';
-import { AUTO_INJECT_ENABLED } from '../global/environment';
-import { ModuleWrapper } from '../interfaces/ModuleWrapper';
-import { MetadataOptions } from '../types/MetadataOptions';
-import { Reflector } from '../interfaces/Reflector';
-import { InjectionToken } from '../types';
-import { Type } from '../types/Type';
+import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
+import { AUTO_INJECT_ENABLED } from "../global/environment";
+import { ModuleWrapper } from "../interfaces/ModuleWrapper";
+import { MetadataOptions } from "../types/MetadataOptions";
+import { Reflector } from "../interfaces/Reflector";
+import { InjectionToken } from "../types";
+import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -77,7 +77,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
 
               if (options?.useValue) {
                      wrapper.useValue = options?.useValue;
-              } else if (typeof options?.useFactory === 'function') {
+              } else if (typeof options?.useFactory === "function") {
                      wrapper.useFactory = options?.useFactory;
               }
 

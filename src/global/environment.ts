@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { env } from 'node:process';
+import { env } from "node:process";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -34,7 +34,7 @@ import { env } from 'node:process';
  * @public
  * @type {String}
  */
-export const ENV_GEEKO_AUTO_INJECT: string = 'GEEKO_AUTO_INJECT';
+export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
 
 /**
  * Geeko logger level flag
@@ -42,7 +42,7 @@ export const ENV_GEEKO_AUTO_INJECT: string = 'GEEKO_AUTO_INJECT';
  * @public
  * @type {String}
  */
-export const GEEKO_META_LOGGER_LEVEL: string = 'GEEKO_META_LOGGER_LEVEL';
+export const GEEKO_META_LOGGER_LEVEL: string = "GEEKO_META_LOGGER_LEVEL";
 
 /**
  * @public
@@ -60,7 +60,7 @@ export const AUTO_INJECT_ENABLED = function (): boolean {
        if (!ENV_AUTO_INJECT_ENABLED) {
               /** Default to enabled if undefined */
               return (ENV_AUTO_INJECT_ENABLED =
-                     env[ENV_GEEKO_AUTO_INJECT] === '0' ? false : true);
+                     env[ENV_GEEKO_AUTO_INJECT] === "0" ? false : true);
        }
 
        return ENV_AUTO_INJECT_ENABLED;

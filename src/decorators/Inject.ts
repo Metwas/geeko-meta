@@ -24,9 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { AUTO_INJECT_ENABLED } from '../global/environment';
-import { InjectionToken } from '../types/Injectable';
-import { Reflector } from '../interfaces/Reflector';
+import { AUTO_INJECT_ENABLED } from "../global/environment";
+import { InjectionToken } from "../types/Injectable";
+import { Reflector } from "../interfaces/Reflector";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

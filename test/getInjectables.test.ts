@@ -24,18 +24,18 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { describe, it } from 'node:test';
-import { Reflector } from '../src/main';
-import assert from 'node:assert/strict';
+import { describe, it } from "node:test";
+import { Reflector } from "../src/main";
+import assert from "node:assert/strict";
 
-import { ENCODER_INJECTABLE_TOKEN } from './dependancies';
+import { ENCODER_INJECTABLE_TOKEN } from "./dependancies";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 const injectables: Array<any> = Reflector.getFor(ENCODER_INJECTABLE_TOKEN);
 
 describe(`Can get all Injectables for token [${ENCODER_INJECTABLE_TOKEN}]`, () => {
-       it('Should at least be one ?', () => {
+       it("Should at least be one ?", () => {
               assert.ok(injectables.length > 0);
        });
 });
