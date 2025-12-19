@@ -48,7 +48,7 @@ export const GEEKO_META_LOGGER_LEVEL: string = "GEEKO_META_LOGGER_LEVEL";
  * @public
  * @type {Boolean}
  */
-let ENV_AUTO_INJECT_ENABLED: boolean = void 0;
+let ENV_AUTO_INJECT_ENABLED: boolean | undefined = void 0;
 
 /**
  * Checks if the automatic injection @see Injectable is enabled

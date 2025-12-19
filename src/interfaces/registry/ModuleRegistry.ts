@@ -35,15 +35,30 @@ import { ModuleWrapper } from "../ModuleWrapper";
  */
 export class ModuleRegistry implements IModuleRegistry {
        /**
+        * @public
+        * @param {Map<InjectionToken, ModuleWrapper<any, any>>} modules
+        * @param {Map<InjectionToken, Array<PropertyMap<any>>>} properties
+        */
+       public constructor(
+              modules?: Map<InjectionToken, ModuleWrapper<any, any>>,
+              properties?: Map<InjectionToken, Array<PropertyMap<any>>>,
+       ) {
+              this._modules =
+                     modules ??
+                     new Map<InjectionToken, ModuleWrapper<any, any>>();
+
+              this._properties =
+                     properties ??
+                     new Map<InjectionToken, Array<PropertyMap<any>>>();
+       }
+
+       /**
         * Contains all injectable @see ModuleWrapper instances
         *
         * @private
         * @type {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
-       private _modules: Map<InjectionToken, ModuleWrapper<any, any>> = new Map<
-              InjectionToken,
-              ModuleWrapper<any, any>
-       >();
+       private _modules: Map<InjectionToken, ModuleWrapper<any, any>>;
 
        /**
         * @see Inject property graph
@@ -51,8 +66,7 @@ export class ModuleRegistry implements IModuleRegistry {
         * @private
         * @type {Map<InjectionToken, ModuleWrapper<any, any>>}
         */
-       private _properties: Map<InjectionToken, Array<PropertyMap<any>>> =
-              new Map<InjectionToken, Array<PropertyMap<any>>>();
+       private _properties: Map<InjectionToken, Array<PropertyMap<any>>>;
 
        /**
         * Contains all injectable @see InjectionToken references

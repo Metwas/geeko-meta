@@ -24,9 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { AUTO_INJECT_ENABLED } from "../global/environment";
-import { InjectionToken } from "../types/Injectable";
 import { Reflector } from "../interfaces/Reflector";
+import { InjectionToken } from "../types/Provider";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -45,11 +44,11 @@ export const Inject = (
         * @param {String} key
         * @param {Number} index
         */
-       return (target: object, key: string, index?: number): void => {
-              if (AUTO_INJECT_ENABLED() === false) {
-                     return void 0;
-              }
-
+       return (
+              target: object,
+              key: string | symbol | undefined,
+              index?: number,
+       ): void => {
               if (!index && key) {
                      const type: any = target?.constructor;
                      /** Method parameter */

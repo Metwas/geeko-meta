@@ -24,10 +24,10 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { CustomDecorator, CustomTrackDecorator } from "../types/Decorators";
 import { AUTO_INJECT_ENABLED } from "../global/environment";
 import { ModuleWrapper } from "../interfaces/ModuleWrapper";
 import { MetadataOptions } from "../types/MetadataOptions";
+import { CustomDecorator } from "../types/Decorators";
 import { Reflector } from "../interfaces/Reflector";
 import { InjectionToken } from "../types";
 import { Type } from "../types/Type";
@@ -73,7 +73,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
                      target,
                      options,
               );
-              wrapper.injectable = options?.injectable;
+              wrapper.injectable = options?.injectable ?? false;
 
               if (options?.useValue) {
                      wrapper.useValue = options?.useValue;
@@ -82,39 +82,6 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
               }
 
               Reflector.register(metadataKey as string, wrapper);
-       };
-
-       factory.KEY = metadataKey;
-       return factory;
-};
-
-/**
- * Helper for setting the metadata for a given method parameter
- *
- * @public
- * @param {T} metadataKey
- * @param {V} parameter
- * @returns {ParameterDecorator & CustomTrackDecorator<T>}
- */
-export const SetParameter = <T, V>(
-       metadataKey: T,
-       parameter: Partial<V>,
-): ParameterDecorator & CustomTrackDecorator<T> => {
-       const factory = (
-              target: object,
-              propertyKey: string | symbol,
-              paramIndex: number,
-       ): void => {
-              const params =
-                     Reflect.getMetadata(metadataKey, target[propertyKey]) ??
-                     [];
-
-              params.push({
-                     index: paramIndex,
-                     ...parameter,
-              });
-
-              Reflect.defineMetadata(metadataKey, params, target[propertyKey]);
        };
 
        factory.KEY = metadataKey;

@@ -32,10 +32,12 @@ import { ENCODER_INJECTABLE_TOKEN } from "./dependancies";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const injectables: Array<any> = Reflector.getFor(ENCODER_INJECTABLE_TOKEN);
+const injectables: Array<any> | undefined = Reflector.getFor(
+       ENCODER_INJECTABLE_TOKEN,
+);
 
 describe(`Can get all Injectables for token [${ENCODER_INJECTABLE_TOKEN}]`, () => {
        it("Should at least be one ?", () => {
-              assert.ok(injectables.length > 0);
+              assert.ok(injectables && injectables.length > 0);
        });
 });

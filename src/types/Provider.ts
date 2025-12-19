@@ -24,14 +24,32 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from "./Injectable";
 import { Type } from "./Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+/**
+ * @see Inject token type
+ *
+ * @public
+ */
+export type InjectionToken = string | symbol;
+
+/**
+ * @see Injectable options
+ *
+ * @public
+ */
+export type InjectableOptions = {
+       inject?: Array<Type<any> | InjectionToken>;
+       useFactory?: (...args: Array<any>) => any;
+       token?: InjectionToken;
+       useValue?: any;
+};
 
 /**
  * @see Injectable provider context definition
  *
  * @public
  */
-export type Provider<T> = InjectableOptions | Array<Type<T>>;
+export type Provider<T> = InjectionToken | InjectableOptions | Type<T>;

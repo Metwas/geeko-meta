@@ -24,28 +24,38 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const {
-       Reflector,
-       Test,
-       INJECTABLE_TOKEN_KEY,
-       ApplicationContext,
-} = require("../dist/main");
+import { ApplicationContext, Reflector } from "../src/main";
+import { JsonEncoder, Test } from "./dependancies";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-// const all = Reflector.getModules(INJECTABLE_TOKEN_KEY);
+const context: ApplicationContext | undefined =
+       Reflector.createApplicationContext({
+              providers: [
+                     Test,
+                     {
+                            token: "JSON_ENCODER",
+                            useFactory: () => {
+                                   return new JsonEncoder();
+                            },
+                     },
+              ],
+       });
 
-/** @TODO: resolve from @see ModuleContext  */
-// const context: ApplicationContext = Reflector.createApplicationContext({
-//        providers: [Test, {
-//               token: "JSON_ENCODER"
-//               useFactory: (): Encoder => {
-//                      return new JsonEncoder();
-//               }
-//        }],
-// });
+const instance: Test | undefined = context?.get(Test);
 
-// context.get(Test);
+describe("Application Context", () => {
+       it("Can get [Test] class ?", () => {
+              assert.ok(instance?.constructor?.name === "Test");
+       });
 
-console.log(Reflector.get(Test).encoder.encode);
-// test.request();
+       it("Can get [Test] encoder ?", () => {
+              assert.ok(instance?.encoder);
+       });
+
+       it("is [Test] JSON encoder ?", () => {
+              assert.ok(instance?.encoder?.constructor?.name === "JsonEncoder");
+       });
+});

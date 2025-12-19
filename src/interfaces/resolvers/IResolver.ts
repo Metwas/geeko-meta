@@ -45,5 +45,5 @@ export interface IResolver {
        resolve<T>(
               token: InjectionToken | Type<T>,
               registry: IModuleRegistry,
-       ): T;
+       ): T | undefined;
 }

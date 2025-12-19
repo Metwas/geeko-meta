@@ -53,9 +53,9 @@ export class ApplicationContext {
         *
         * @public
         * @param {InjectionToken | Type<T>} target
-        * @returns {T}
+        * @returns {T | undefined}
         */
-       public get<T>(target: InjectionToken | Type<T>): T {
+       public get<T>(target: InjectionToken | Type<T>): T | undefined {
               return this.resolver.resolve(target, this.registry);
        }
 }

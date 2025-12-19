@@ -2,6 +2,7 @@
        "compilerOptions": {
               "module": "nodenext",
               "target": "esnext",
+              "strict": true,
               "outDir": "dist",
               "lib": ["ESNext"],
               "removeComments": true,

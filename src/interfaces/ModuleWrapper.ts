@@ -42,7 +42,10 @@ export class ModuleWrapper<I, T> {
         * @param {Type<T>} target
         * @param {InjectableOptions} options
         */
-       public constructor(target: Type<T>, options?: InjectableOptions) {
+       public constructor(
+              target: Type<T> | undefined,
+              options?: InjectableOptions,
+       ) {
               this.useFactory = options?.useFactory;
               this.useValue = options?.useValue;
               this._token = options?.token;
@@ -55,7 +58,7 @@ export class ModuleWrapper<I, T> {
         * @private
         * @type {String}
         */
-       private _token: InjectionToken = void 0;
+       private _token: InjectionToken | undefined = void 0;
 
        /**
         * Base constructor object/class type
@@ -63,7 +66,7 @@ export class ModuleWrapper<I, T> {
         * @private
         * @type {Type<T>}
         */
-       private _target: Type<T> = void 0;
+       private _target: Type<T> | undefined = void 0;
 
        /**
         * @see this._target instance
@@ -71,7 +74,7 @@ export class ModuleWrapper<I, T> {
         * @private
         * @type {I}
         */
-       private _instance: I = void 0;
+       private _instance: I | undefined = void 0;
 
        /**
         * Get/Set the @see Type<T> instance value. This takes priority over @see useFactory
@@ -104,7 +107,7 @@ export class ModuleWrapper<I, T> {
         * @param {I} override
         * @returns {I}
         */
-       public instance(override?: I): I {
+       public instance(override?: I): I | undefined {
               if (override) {
                      this._instance = override;
               }
@@ -119,7 +122,7 @@ export class ModuleWrapper<I, T> {
         * @param {Type<T>} override
         * @returns {Type<T>}
         */
-       public target(override?: Type<T>): Type<T> {
+       public target(override?: Type<T>): Type<T> | undefined {
               if (override) {
                      this._target = override;
               }

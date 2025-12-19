@@ -31,11 +31,11 @@ import { Test } from "./dependancies";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const instance: Test = Reflector.get(Test);
+const instance: Test | undefined = Reflector.get(Test);
 
 describe("Auto inject for [TestClass]", () => {
        it("Instance OK ?", () => {
-              assert.ok(instance.constructor.name === "Test");
+              assert.ok(instance?.constructor.name === "Test");
        });
 
        it("Subclass Instance OK ?", () => {

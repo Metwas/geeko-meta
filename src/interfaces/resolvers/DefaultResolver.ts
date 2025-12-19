@@ -43,7 +43,7 @@ export class DefaultResolver implements IResolver {
         * @public
         * @param {LogService} log
         */
-       public constructor(public readonly log: LogService) {}
+       public constructor(public readonly log?: LogService) {}
 
        /**
         * Resolves the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
@@ -57,79 +57,94 @@ export class DefaultResolver implements IResolver {
               token: InjectionToken | Type<T>,
               registry: IModuleRegistry,
               options?: ResolverOptions,
-       ): T {
-              try {
-                     const name: string =
-                            typeof token === "function" ? token?.name : token;
+       ): T | undefined {
+              const name: InjectionToken =
+                     typeof token === "function" ? token?.name : token;
 
-                     if (!registry || !name) {
-                            return void 0;
-                     }
+              if (!registry || !name) {
+                     return void 0;
+              }
 
-                     const properties: Map<
-                            InjectionToken,
-                            Array<PropertyMap<any>>
-                     > = registry.properties();
+              const properties: Map<
+                     InjectionToken,
+                     Array<PropertyMap<any>>
+              > = registry.properties();
 
-                     const modules: Map<
-                            InjectionToken,
-                            ModuleWrapper<any, T>
-                     > = registry.modules();
+              const modules: Map<
+                     InjectionToken,
+                     ModuleWrapper<any, T>
+              > = registry.modules();
 
-                     const module: ModuleWrapper<any, T> = modules.get(name);
+              const module: ModuleWrapper<any, T> | undefined =
+                     modules.get(name);
 
-                     if (!module || module.injectable === false) {
-                            return void 0;
-                     }
+              if (!module || module.injectable === false) {
+                     return void 0;
+              }
 
-                     const mtarget: Type<T> = module.target() as Type<T>;
-                     let instance: any = module.instance();
+              const mtarget: Type<T> = module.target() as Type<T>;
+              let instance: any = module.instance();
 
-                     /** Singleton behaviour if @see module already has instance assigned */
-                     if (instance && options?.singleton !== false) {
-                            return instance;
-                     }
+              /** Singleton behaviour if @see module already has instance assigned */
+              if (instance && options?.singleton !== false) {
+                     return instance;
+              }
 
+              let propertyMap: Array<PropertyMap<T>> | undefined = void 0;
+              let resolved: Array<any> | undefined = void 0;
+
+              let plength: number = 0;
+              let pindex: number = 0;
+              let length: number = 0;
+
+              /** Resolve dependancies for @see mtarget */
+              if (mtarget) {
                      const dependancies: Array<any> = Reflect.getMetadata(
                             "design:paramtypes",
                             mtarget,
                      );
-                     const propertyMap: Array<PropertyMap<T>> = properties.get(
-                            mtarget.name,
-                     );
-                     const plength: number = propertyMap?.length ?? 0;
-                     const length: number = dependancies?.length ?? 0;
 
-                     let resolved: Array<any> = [];
+                     propertyMap = properties.get(mtarget.name);
+
+                     plength = propertyMap?.length ?? 0;
+                     length = dependancies?.length ?? 0;
 
                      if (length > 0) {
                             /** resolve dependancies first- @TODO Attempt to resolve forwardRef or circular dependancies */
                             let index: number = 0;
+                            resolved = [];
 
                             for (; index < length; ++index) {
                                    const type: Type<T> = dependancies[index];
-                                   let lastToken: InjectionToken = void 0;
+                                   let lastToken: InjectionToken | undefined =
+                                          void 0;
+
                                    let isInjected: boolean = false;
-                                   let _resolved: T = void 0;
+                                   let _resolved: T | undefined = void 0;
 
-                                   for (let i = 0; i < plength; ++i) {
-                                          const map: PropertyMap<T> =
-                                                 propertyMap[i];
+                                   if (propertyMap) {
+                                          for (; pindex < plength; ++pindex) {
+                                                 const map: PropertyMap<T> =
+                                                        propertyMap[pindex];
 
-                                          if (map?.index === index) {
-                                                 isInjected = true;
-                                                 lastToken = map.token;
+                                                 if (map?.index === index) {
+                                                        isInjected = true;
+                                                        lastToken = map.token;
 
-                                                 /** Fetch dependancy based on injected token */
-                                                 _resolved = this.resolve(
-                                                        map.token,
-                                                        registry,
-                                                 );
-                                                 break;
+                                                        /** Fetch dependancy based on injected token */
+                                                        _resolved =
+                                                               this.resolve(
+                                                                      map.token,
+                                                                      registry,
+                                                               );
+                                                        break;
+                                                 }
                                           }
+
+                                          pindex = 0;
                                    }
 
-                                   let dependancy: T = void 0;
+                                   let dependancy: T | undefined = void 0;
 
                                    if (isInjected) {
                                           /** Resolve custom module referenced by @see Inject */
@@ -146,24 +161,28 @@ export class DefaultResolver implements IResolver {
                                           (isInjected && !_resolved)
                                    ) {
                                           this.log?.warn(
-                                                 `Unable to resolve dependancy ${lastToken ? "[" + lastToken + "] " : ""}[${type}]`,
+                                                 `Unable to resolve dependancy ${lastToken ? "[" + String(lastToken) + "] " : ""}[${type}]`,
                                           );
                                    }
 
                                    resolved.push(dependancy);
                             }
                      }
+              }
 
-                     if (module.useValue) {
-                            instance = module.useValue;
-                     } else if (typeof module.useFactory === "function") {
-                            instance = module.useFactory();
-                     } else {
-                            instance = new mtarget(...resolved);
-                     }
+              if (module.useValue) {
+                     instance = module.useValue;
+              } else if (typeof module.useFactory === "function") {
+                     instance = module.useFactory();
+              } else {
+                     instance = resolved
+                            ? new mtarget(...resolved)
+                            : new mtarget();
+              }
 
+              if (propertyMap) {
                      /** Resolve @see target injected properties */
-                     let pindex: number = 0;
+                     pindex = 0;
 
                      for (; pindex < plength; ++pindex) {
                             const property: PropertyMap<T> =
@@ -183,11 +202,8 @@ export class DefaultResolver implements IResolver {
                                    instance[property.key] = resolved;
                             }
                      }
-
-                     return module.instance(instance);
-              } catch (error) {
-                     this.log?.error(`Resolve Error: [${error.message}]`);
-                     return void 0;
               }
+
+              return module.instance(instance);
        }
 }

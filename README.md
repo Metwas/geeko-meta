@@ -77,7 +77,7 @@ import { Reflector } from '@geeko/meta';
 
 const context: ApplicationContext = Reflector.createApplicationContext({
        providers: [Test, {
-              token: "JSON_ENCODER"
+              token: "JSON_ENCODER",
               useFactory: (): Encoder => {
                      return new JsonEncoder();
               }
@@ -156,6 +156,4 @@ Logging can also be disabled by setting the process environment variable **GEEKO
 ```sh
 npm i @geeko/meta
 ```
-#
-#
 #

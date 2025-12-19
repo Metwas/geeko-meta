@@ -24,6 +24,7 @@
 
 export * from "./MetadataOptions";
 export * from "./PropertyMap";
-export * from "./Injectable";
 export * from "./Decorators";
+export * from "./Provider";
+export * from "./Context";
 export * from "./Type";
