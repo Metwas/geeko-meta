@@ -24,19 +24,23 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from "../types/Injectable";
+import {
+       InjectableOptions,
+       InjectionToken,
+       ModuleContext,
+       PropertyMap,
+       Provider,
+       Type,
+} from "../types";
+
 import { GEEKO_META_LOGGER_LEVEL } from "../global/environment";
 import { DefaultResolver } from "./resolvers/DefaultResolver";
 import { IModuleRegistry } from "./registry/IModuleRegistry";
 import { ModuleRegistry } from "./registry/ModuleRegistry";
 import { ApplicationContext } from "./ApplicationContext";
-import { PropertyMap } from "../types/PropertyMap";
 import { LogLevel, LogService } from "@geeko/log";
 import { IResolver } from "./resolvers/IResolver";
-import { ModuleContext } from "../types/Context";
 import { ModuleWrapper } from "./ModuleWrapper";
-import { Provider } from "../types/Provider";
-import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -52,7 +56,7 @@ export class Reflector {
         * @private
         * @type {IResolver}
         */
-       private static _resolver: IResolver = void 0;
+       private static _resolver: IResolver | undefined = void 0;
 
        /**
         * Default module resolver for this @see Reflector interface
@@ -60,7 +64,7 @@ export class Reflector {
         * @private
         * @type {Resolver}
         */
-       private static _registry: IModuleRegistry = void 0;
+       private static _registry: IModuleRegistry | undefined = void 0;
 
        /**
         * Default logger
@@ -68,7 +72,7 @@ export class Reflector {
         * @private
         * @type {LogService}
         */
-       private static _log: LogService = void 0;
+       private static _log: LogService | undefined = void 0;
 
        /**
         * Ready state
@@ -97,34 +101,41 @@ export class Reflector {
                      return void 0;
               }
 
-              const injectables: Map<
-                     InjectionToken,
-                     Array<InjectionToken>
-              > = Reflector._registry.injectables();
-              const modules: Map<
-                     InjectionToken,
-                     ModuleWrapper<I, T>
-              > = Reflector._registry.modules();
+              const injectables:
+                     | Map<InjectionToken, Array<InjectionToken>>
+                     | undefined = Reflector._registry?.injectables();
+
+              const modules:
+                     | Map<InjectionToken, ModuleWrapper<I, T>>
+                     | undefined = Reflector._registry?.modules();
 
               /** Key is the Injector token */
-              const existing: Array<InjectionToken> = injectables.get(key);
-              let isArray: boolean = Array.isArray(existing);
-              let name: InjectionToken = wrapper.name();
+              const existing: Array<InjectionToken> | undefined =
+                     injectables?.get(key);
 
-              if (name && isArray && existing.indexOf(name) > -1) {
+              let isArray: boolean = Array.isArray(existing);
+              let name: InjectionToken | undefined = wrapper.name();
+
+              if (
+                     !name ||
+                     (name &&
+                            isArray &&
+                            existing &&
+                            existing.indexOf(name) > -1)
+              ) {
                      /** Already registered injectable of type @see T */
                      return void 0;
               }
 
               if (wrapper.injectable === true) {
                      if (isArray === false) {
-                            injectables.set(key, [name]);
-                     } else {
+                            injectables?.set(key, [name]);
+                     } else if (existing) {
                             existing.push(name);
                      }
               }
 
-              modules.set(name, wrapper);
+              modules?.set(name, wrapper);
        }
 
        /**
@@ -142,16 +153,16 @@ export class Reflector {
                      return void 0;
               }
 
-              const properties: Map<
-                     InjectionToken,
-                     Array<PropertyMap<any>>
-              > = Reflector._registry.properties();
+              const properties:
+                     | Map<InjectionToken, Array<PropertyMap<any>>>
+                     | undefined = Reflector._registry?.properties();
 
               const name: string = property.target.name;
-              const existing: Array<PropertyMap<T>> = properties.get(name);
+              const existing: Array<PropertyMap<T>> | undefined =
+                     properties?.get(name);
 
               if (!existing) {
-                     properties.set(name, [property]);
+                     properties?.set(name, [property]);
                      return void 0;
               }
 
@@ -168,12 +179,12 @@ export class Reflector {
         */
        public static get<T = new () => void>(
               token: InjectionToken | Type<T>,
-       ): T {
-              if (Reflector.ready() === false) {
+       ): T | undefined {
+              if (Reflector.ready() === false || !Reflector._registry) {
                      return void 0;
               }
 
-              return Reflector._resolver.resolve(token, Reflector._registry);
+              return Reflector._resolver?.resolve(token, Reflector._registry);
        }
 
        /**
@@ -183,14 +194,19 @@ export class Reflector {
         * @param {InjectionToken} key
         * @returns {Array<unknown>}
         */
-       public static getFor(key: InjectionToken): Array<unknown> {
-              const injectables: Map<
-                     InjectionToken,
-                     Array<InjectionToken>
-              > = Reflector._registry.injectables();
+       public static getFor(key: InjectionToken): Array<unknown> | undefined {
+              const injectables:
+                     | Map<InjectionToken, Array<InjectionToken>>
+                     | undefined = Reflector._registry?.injectables();
 
               if (injectables && injectables.has(key)) {
-                     const tokens: Array<InjectionToken> = injectables.get(key);
+                     const tokens: Array<InjectionToken> | undefined =
+                            injectables.get(key);
+
+                     if (!tokens) {
+                            return void 0;
+                     }
+
                      const targets: Array<unknown> = [];
 
                      const length: number = tokens.length;
@@ -225,31 +241,47 @@ export class Reflector {
         */
        public static createApplicationContext(
               context: ModuleContext,
-       ): ApplicationContext {
-              if (!context || typeof context !== "object") {
+              resolver?: IResolver,
+       ): ApplicationContext | undefined {
+              if (!context) {
                      return void 0;
               }
 
               const providers: Array<Provider<any>> = context.providers;
-
               let length: number = providers.length;
 
               if (length === 0) {
-                     /** Not point doing anything if there are no @see Provider objects */
                      return void 0;
               }
 
               let index: number = 0;
 
-              const resolver: IResolver = new DefaultResolver(
-                     context.logger ?? Reflector._log,
+              if (!resolver) {
+                     resolver = new DefaultResolver(
+                            context.logger ?? Reflector._log,
+                     );
+              }
+
+              /** Clone default @Inject properties if any, this may be overriden depending on the @see Provider::inject property */
+              const properties: Map<
+                     InjectionToken,
+                     Array<PropertyMap<any>>
+              > = new Map(Reflector._registry?.properties());
+
+              const registry: IModuleRegistry = new ModuleRegistry(
+                     void 0,
+                     properties,
               );
-              const registry: IModuleRegistry = new ModuleRegistry();
+
+              const modules: Map<
+                     InjectionToken,
+                     ModuleWrapper<any, any>
+              > = registry.modules();
 
               for (; index < length; ++index) {
                      const provider: Provider<any> = providers[index];
-                     let options: InjectableOptions = void 0;
-                     let target: Type<any> = void 0;
+                     let options: InjectableOptions | undefined = void 0;
+                     let target: Type<any> | undefined = void 0;
 
                      if (
                             typeof (provider as InjectableOptions)?.token ===
@@ -266,17 +298,23 @@ export class Reflector {
                             target = provider as Type<any>;
                      }
 
-                     this._log?.debug(
-                            `Creating wrapper: [${target ?? "Unknown target"}] [${options?.token ?? "Unknown Token"}]`,
-                     );
-
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
                             any
                      >(target, options);
 
+                     const name: InjectionToken | undefined = wrapper.name();
+
+                     if (!name) {
+                            this._log?.error(
+                                   "Invalid name was provided for the Reflector",
+                            );
+
+                            continue;
+                     }
+
                      wrapper.injectable = true;
-                     registry.modules().set(wrapper.name(), wrapper);
+                     modules.set(name, wrapper);
               }
 
               return new ApplicationContext(registry, resolver);
@@ -297,18 +335,21 @@ export class Reflector {
                      Reflector._ready = true;
 
                      if (!Reflector._log) {
-                            let logEnv: string =
+                            let logEnv: string | undefined =
                                    process.env[GEEKO_META_LOGGER_LEVEL];
 
                             if (logEnv !== "0" && logEnv !== "disable") {
-                                   if (logEnv === "1" || logEnv === "true") {
-                                          logEnv = "info";
+                                   if (logEnv === "2" || logEnv === "verbose") {
+                                          logEnv = "verbose";
+                                   } else if (
+                                          logEnv === "3" ||
+                                          logEnv === "debug"
+                                   ) {
+                                          logEnv = "debug";
                                    }
 
                                    Reflector._log = new LogService({
-                                          level:
-                                                 (logEnv as LogLevel) ??
-                                                 "verbose",
+                                          level: (logEnv as LogLevel) ?? "info",
                                           title: "Reflect",
                                    });
                             }
@@ -335,7 +376,7 @@ export class Reflector {
         * @param {IResolver} override
         * @returns {IResolver}
         */
-       public static resolver(override: IResolver): IResolver {
+       public static resolver(override: IResolver): IResolver | undefined {
               if (override) {
                      Reflector._resolver = override;
               }
@@ -350,7 +391,9 @@ export class Reflector {
         * @param {IModuleRegistry} override
         * @returns {IModuleRegistry}
         */
-       public static registry(override: IModuleRegistry): IModuleRegistry {
+       public static registry(
+              override: IModuleRegistry,
+       ): IModuleRegistry | undefined {
               if (override) {
                      Reflector._registry = override;
               }
