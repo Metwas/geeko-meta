@@ -173,9 +173,8 @@ export class Reflector {
         * Attempts to resolve the instance of the given @see Type<T> target
         *
         * @public
-        * @param {Type<T>} target
-        * @param {InjectableOptions} options
-        * @returns {T}
+        * @param {InjectionToken | Type<T>} token
+        * @returns {T | undefined}
         */
        public static get<T = new () => void>(
               token: InjectionToken | Type<T>,
@@ -192,7 +191,7 @@ export class Reflector {
         *
         * @public
         * @param {InjectionToken} key
-        * @returns {Array<unknown>}
+        * @returns {Array<unknown> | undefined}
         */
        public static getFor(key: InjectionToken): Array<unknown> | undefined {
               const injectables:
@@ -374,7 +373,7 @@ export class Reflector {
         *
         * @public
         * @param {IResolver} override
-        * @returns {IResolver}
+        * @returns {IResolver | undefined}
         */
        public static resolver(override: IResolver): IResolver | undefined {
               if (override) {
@@ -389,7 +388,7 @@ export class Reflector {
         *
         * @public
         * @param {IModuleRegistry} override
-        * @returns {IModuleRegistry}
+        * @returns {IModuleRegistry | undefined}
         */
        public static registry(
               override: IModuleRegistry,
