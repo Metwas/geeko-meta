@@ -2,8 +2,7 @@
        "compilerOptions": {
               "module": "nodenext",
               "target": "esnext",
-              "strict": true,
-              "outDir": "dist",
+              "outDir": ".ts-cache",
               "lib": ["ESNext"],
               "removeComments": true,
               "declaration": true,
@@ -11,5 +10,5 @@
               "experimentalDecorators": true
        },
        "exclude": ["node_modules", "dist", "build"],
-       "include": ["src"]
+       "include": ["test"]
 }

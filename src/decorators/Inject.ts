@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,52 +22,49 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { AUTO_INJECT_ENABLED } from "../global/environment";
-import { InjectionToken } from "../types/Injectable";
 import { Reflector } from "../interfaces/Reflector";
+import { InjectionToken } from "../types/Provider";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * Injects property or method parameter metadata
- * 
+ *
  * @public
- * @param {InjectionToken} token 
+ * @param {InjectionToken} token
  * @returns {PropertyDecorator & ParameterDecorator}
  */
-export const Inject = ( token: InjectionToken ): PropertyDecorator & ParameterDecorator =>
-{
+export const Inject = (
+       token: InjectionToken,
+): PropertyDecorator & ParameterDecorator => {
        /**
         * @param {Object} target
         * @param {String} key
         * @param {Number} index
         */
-       return ( target: object, key: string, index?: number ): void =>
-       {
-              if ( AUTO_INJECT_ENABLED() === false )
-              {
-                     return void 0;
-              }
-
-              if ( !index && key )
-              {
+       return (
+              target: object,
+              key: string | symbol | undefined,
+              index?: number,
+       ): void => {
+              if (!index && key) {
                      const type: any = target?.constructor;
                      /** Method parameter */
-                     Reflector.registryProperty( {
+                     Reflector.registryProperty({
                             target: type,
                             token: token,
                             key: key,
-                     } );
+                     });
 
                      return void 0;
               }
 
-              Reflector.registryProperty( {
+              Reflector.registryProperty({
                      target: target as any,
                      token: token,
-                     index: index
-              } );
+                     index: index,
+              });
        };
 };

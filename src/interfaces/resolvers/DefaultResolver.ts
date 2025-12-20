@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { InjectionToken, PropertyMap, Type } from "../../types";
 import { ResolverOptions } from "../../types/ResolverOptions";
@@ -35,150 +35,175 @@ import { IResolver } from "./IResolver";
 
 /**
  * Core @see ModuleWrapper resolver interface
- * 
- * @public 
+ *
+ * @public
  */
-export class DefaultResolver implements IResolver
-{
+export class DefaultResolver implements IResolver {
        /**
         * @public
-        * @param {LogService} log 
+        * @param {LogService} log
         */
-       public constructor( public readonly log: LogService ) { }
+       public constructor(public readonly log?: LogService) {}
 
        /**
         * Resolves the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
-        * 
-        * @public 
-        * @param {InjectionToken | Type<T>} token 
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
         * @param {IModuleRegistry} registry
         * @param {ResolverOptions} options
         */
-       public resolve<T>( token: InjectionToken | Type<T>, registry: IModuleRegistry, options?: ResolverOptions ): T
-       {
-              try
-              {
-                     const name: string = typeof token === "function" ? token?.name : token;
+       public resolve<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+              options?: ResolverOptions,
+       ): T | undefined {
+              const name: InjectionToken =
+                     typeof token === "function" ? token?.name : token;
 
-                     if ( !registry || !name )
-                     {
-                            return void 0;
-                     }
+              if (!registry || !name) {
+                     return void 0;
+              }
 
-                     const properties: Map<InjectionToken, Array<PropertyMap<any>>> = registry.properties();
-                     const modules: Map<InjectionToken, ModuleWrapper<any, T>> = registry.modules();
+              const properties: Map<
+                     InjectionToken,
+                     Array<PropertyMap<any>>
+              > = registry.properties();
 
-                     const module: ModuleWrapper<any, T> = modules.get( name );
+              const modules: Map<
+                     InjectionToken,
+                     ModuleWrapper<any, T>
+              > = registry.modules();
 
-                     if ( !module || module.injectable === false )
-                     {
-                            return void 0;
-                     }
+              const module: ModuleWrapper<any, T> | undefined =
+                     modules.get(name);
 
-                     const mtarget: Type<T> = module.target() as Type<T>;
-                     let instance: any = module.instance();
+              if (!module || module.injectable === false) {
+                     return void 0;
+              }
 
-                     /** Singleton behaviour if @see module already has instance assigned */
-                     if ( instance && options?.singleton !== false )
-                     {
-                            return instance;
-                     }
+              const mtarget: Type<T> = module.target() as Type<T>;
+              let instance: any = module.instance();
 
-                     const dependancies: Array<any> = Reflect.getMetadata( "design:paramtypes", mtarget );
-                     const propertyMap: Array<PropertyMap<T>> = properties.get( mtarget.name );
-                     const plength: number = propertyMap?.length ?? 0;
-                     const length: number = dependancies?.length ?? 0;
+              /** Singleton behaviour if @see module already has instance assigned */
+              if (instance && options?.singleton !== false) {
+                     return instance;
+              }
 
-                     let resolved: Array<any> = [];
+              let propertyMap: Array<PropertyMap<T>> | undefined = void 0;
+              let resolved: Array<any> | undefined = void 0;
 
-                     if ( length > 0 )
-                     {
+              let plength: number = 0;
+              let pindex: number = 0;
+              let length: number = 0;
+
+              /** Resolve dependancies for @see mtarget */
+              if (mtarget) {
+                     const dependancies: Array<any> = Reflect.getMetadata(
+                            "design:paramtypes",
+                            mtarget,
+                     );
+
+                     propertyMap = properties.get(mtarget.name);
+
+                     plength = propertyMap?.length ?? 0;
+                     length = dependancies?.length ?? 0;
+
+                     if (length > 0) {
                             /** resolve dependancies first- @TODO Attempt to resolve forwardRef or circular dependancies */
                             let index: number = 0;
+                            resolved = [];
 
-                            for ( ; index < length; ++index )
-                            {
-                                   const type: Type<T> = dependancies[ index ];
-                                   let lastToken: InjectionToken = void 0;
+                            for (; index < length; ++index) {
+                                   const type: Type<T> = dependancies[index];
+                                   let lastToken: InjectionToken | undefined =
+                                          void 0;
+
                                    let isInjected: boolean = false;
-                                   let _resolved: T = void 0;
+                                   let _resolved: T | undefined = void 0;
 
-                                   for ( let i = 0; i < plength; ++i )
-                                   {
-                                          const map: PropertyMap<T> = propertyMap[ i ];
+                                   if (propertyMap) {
+                                          for (; pindex < plength; ++pindex) {
+                                                 const map: PropertyMap<T> =
+                                                        propertyMap[pindex];
 
-                                          if ( map?.index === index )
-                                          {
-                                                 isInjected = true;
-                                                 lastToken = map.token;
+                                                 if (map?.index === index) {
+                                                        isInjected = true;
+                                                        lastToken = map.token;
 
-                                                 /** Fetch dependancy based on injected token */
-                                                 _resolved = this.resolve( map.token, registry );
-                                                 break;
+                                                        /** Fetch dependancy based on injected token */
+                                                        _resolved =
+                                                               this.resolve(
+                                                                      map.token,
+                                                                      registry,
+                                                               );
+                                                        break;
+                                                 }
                                           }
+
+                                          pindex = 0;
                                    }
 
-                                   let dependancy: T = void 0;
+                                   let dependancy: T | undefined = void 0;
 
-                                   if ( isInjected )
-                                   {
+                                   if (isInjected) {
                                           /** Resolve custom module referenced by @see Inject */
                                           dependancy = _resolved;
-                                   }
-                                   else
-                                   {
-                                          dependancy = this.resolve( type, registry );
-                                   }
-
-                                   if ( !dependancy || ( isInjected && !_resolved ) )
-                                   {
-                                          this.log?.warn( `Unable to resolve dependancy ${lastToken ? '[' + lastToken + '] ' : ''}[${type}]` );
+                                   } else {
+                                          dependancy = this.resolve(
+                                                 type,
+                                                 registry,
+                                          );
                                    }
 
-                                   resolved.push( dependancy );
+                                   if (
+                                          !dependancy ||
+                                          (isInjected && !_resolved)
+                                   ) {
+                                          this.log?.warn(
+                                                 `Unable to resolve dependancy ${lastToken ? "[" + String(lastToken) + "] " : ""}[${type}]`,
+                                          );
+                                   }
+
+                                   resolved.push(dependancy);
                             }
                      }
+              }
 
-                     if ( module.useValue )
-                     {
-                            instance = module.useValue;
-                     }
-                     else if ( typeof module.useFactory === "function" )
-                     {
-                            instance = module.useFactory();
-                     }
-                     else
-                     {
-                            instance = new mtarget( ...resolved );
-                     }
+              if (module.useValue) {
+                     instance = module.useValue;
+              } else if (typeof module.useFactory === "function") {
+                     instance = module.useFactory();
+              } else {
+                     instance = resolved
+                            ? new mtarget(...resolved)
+                            : new mtarget();
+              }
 
+              if (propertyMap) {
                      /** Resolve @see target injected properties */
-                     let pindex: number = 0;
+                     pindex = 0;
 
-                     for ( ; pindex < plength; ++pindex )
-                     {
-                            const property: PropertyMap<T> = propertyMap[ pindex ];
+                     for (; pindex < plength; ++pindex) {
+                            const property: PropertyMap<T> =
+                                   propertyMap[pindex];
 
                             /** Only resolve property.key */
-                            if ( typeof property.key === "string" )
-                            {
-                                   const resolved: any = this.resolve( property.token, registry );
+                            if (typeof property.key === "string") {
+                                   const resolved: any = this.resolve(
+                                          property.token,
+                                          registry,
+                                   );
 
-                                   if ( !resolved )
-                                   {
+                                   if (!resolved) {
                                           continue;
                                    }
 
-                                   instance[ property.key ] = resolved;
+                                   instance[property.key] = resolved;
                             }
                      }
+              }
 
-                     return module.instance( instance );
-              }
-              catch ( error )
-              {
-                     this.log?.error( `Resolve Error: [${error.message}]` );
-                     return void 0;
-              }
+              return module.instance(instance);
        }
 }

@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IModuleRegistry } from "./registry/IModuleRegistry";
 import { IResolver } from "./resolvers/IResolver";
@@ -32,29 +32,30 @@ import { InjectionToken, Type } from "../types";
 
 /**
  * Default @see IApplicationContext implementation
- * 
+ *
  * @public
  */
-export class ApplicationContext
-{
+export class ApplicationContext {
        /**
         * Expects @see IModuleRegistry instance
-        * 
+        *
         * @public
         * @param {IModuleRegistry} registry
         * @param {IResolver} resolver
         */
-       public constructor( public readonly registry: IModuleRegistry, public readonly resolver: IResolver ) { }
+       public constructor(
+              public readonly registry: IModuleRegistry,
+              public readonly resolver: IResolver,
+       ) {}
 
        /**
         * Resolves the @see T from the specified @see InjectionToken or @see Type<T>
-        * 
-        * @public 
-        * @param {InjectionToken | Type<T>} target 
-        * @returns {T}
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} target
+        * @returns {T | undefined}
         */
-       public get<T>( target: InjectionToken | Type<T> ): T
-       {
-              return this.resolver.resolve( target, this.registry );
+       public get<T>(target: InjectionToken | Type<T>): T | undefined {
+              return this.resolver.resolve(target, this.registry);
        }
 }

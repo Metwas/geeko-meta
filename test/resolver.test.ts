@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,20 +22,23 @@
      SOFTWARE.
 */
 
-/**
- * @see Inject token type
- * 
- * @public
- */
-export type InjectionToken = string;
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-/**
- * @see Injectable options
- * 
- * @public
- */
-export type InjectableOptions = {
-       useFactory?: ( ...args: Array<any> ) => any;
-       token?: InjectionToken;
-       useValue?: any;
-};
+import { describe, it } from "node:test";
+import { Reflector } from "../src/main";
+import assert from "node:assert/strict";
+import { Test } from "./dependancies";
+
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+const instance: Test | undefined = Reflector.get(Test);
+
+describe("Auto inject for [TestClass]", () => {
+       it("Instance OK ?", () => {
+              assert.ok(instance?.constructor.name === "Test");
+       });
+
+       it("Subclass Instance OK ?", () => {
+              assert.ok(typeof instance?.encoder?.encode === "function");
+       });
+});

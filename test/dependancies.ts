@@ -24,21 +24,41 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { MetadataOptions, InjectableOptions } from "../types";
-import { CustomDecorator } from "../types/Decorators";
-import { SetMetadata } from "./SetMetadata";
+import {
+       SetMetadata,
+       Injectable,
+       Inject,
+       InjectableOptions,
+       CustomDecorator,
+       MetadataOptions,
+} from "../src/main";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Sets a @see ClassDecorator to injectable.
+ * Used to reference a custom @see SetMetadata injector token
+ *
+ * @public
+ * @type {String}
+ */
+export const ENCODER_INJECTABLE_TOKEN: string = "ENCODER_INJECTABLE_TOKEN";
+
+/**
+ * @public
+ */
+export interface Encoder {
+       encode(value: any): string;
+       decode(value: string): any;
+}
+
+/**
+ * Custom @see Encoder based injection declaration.
  *
  * @public
  * @param {InjectableOptions | String} options
  * @returns {CustomDecorator<T>}
  */
-export const Injectable = (
+export const Encoding = (
        options?: string | InjectableOptions,
 ): CustomDecorator => {
        let metadata: MetadataOptions = Object.assign(
@@ -50,5 +70,51 @@ export const Injectable = (
               },
        );
 
-       return SetMetadata(INJECTABLE_TOKEN_KEY, true, metadata);
+       return SetMetadata(ENCODER_INJECTABLE_TOKEN, true, metadata);
 };
+
+/**
+ * Custom hex encoder definition
+ *
+ * @public
+ */
+@Encoding("hex")
+export class HexEncoder implements Encoder {
+       encode(value: any): string {
+              return "0x00";
+       }
+
+       decode(value: string): any {
+              return "0x01";
+       }
+}
+
+/**
+ * Native @see JSON encoder/decoder
+ *
+ * @public
+ */
+@Injectable("JSON_ENCODER")
+export class JsonEncoder implements Encoder {
+       encode(value: any): string {
+              return JSON.stringify(value);
+       }
+
+       decode(value: string): any {
+              return JSON.parse(value);
+       }
+}
+
+/**
+ * @public
+ */
+@Injectable()
+export class Test {
+       /**
+        * Expects @see Encoder interface - in this case the @see JsonEncoder
+        *
+        * @public
+        * @param {Encoder} encoder
+        */
+       public constructor(@Inject("JSON_ENCODER") public encoder: Encoder) {}
+}

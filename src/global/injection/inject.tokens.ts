@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 
 /**
  * Class property injection token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -32,7 +32,7 @@ export const PROPERTY_INJECT_TOKEN: string = "CLASS_PROPERTY_TOKEN";
 
 /**
  * Contructor or Method parameter injection token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -40,8 +40,8 @@ export const PARAMETER_INJECT_TOKEN: string = "METHOD_PARAMETER_TOKEN";
 
 /**
  * @see Injectable metadata token key
- * 
+ *
  * @public
- * @type {String} 
+ * @type {String}
  */
 export const INJECTABLE_TOKEN_KEY: string = "INJECTABLE_TOKEN_KEY";

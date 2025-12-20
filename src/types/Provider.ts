@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,16 +22,34 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from "./Injectable";
 import { Type } from "./Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see Injectable provider context definition
- * 
+ * @see Inject token type
+ *
  * @public
  */
-export type Provider<T> = InjectableOptions | Array<Type<T>>;
+export type InjectionToken = string | symbol;
+
+/**
+ * @see Injectable options
+ *
+ * @public
+ */
+export type InjectableOptions = {
+       inject?: Array<Type<any> | InjectionToken>;
+       useFactory?: (...args: Array<any>) => any;
+       token?: InjectionToken;
+       useValue?: any;
+};
+
+/**
+ * @see Injectable provider context definition
+ *
+ * @public
+ */
+export type Provider<T> = InjectionToken | InjectableOptions | Type<T>;

@@ -24,44 +24,38 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { env } from "node:process";
+import { ApplicationContext, Reflector } from "../src/main";
+import { JsonEncoder, Test } from "./dependancies";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-/**
- * Global environment variable to declare if automatic injection is enabled
- *
- * @public
- * @type {String}
- */
-export const ENV_GEEKO_AUTO_INJECT: string = "GEEKO_AUTO_INJECT";
+const context: ApplicationContext | undefined =
+       Reflector.createApplicationContext({
+              providers: [
+                     Test,
+                     {
+                            token: "JSON_ENCODER",
+                            useFactory: () => {
+                                   return new JsonEncoder();
+                            },
+                     },
+              ],
+       });
 
-/**
- * Geeko logger level flag
- *
- * @public
- * @type {String}
- */
-export const GEEKO_META_LOGGER_LEVEL: string = "GEEKO_META_LOGGER_LEVEL";
+const instance: Test | undefined = context?.get(Test);
 
-/**
- * @public
- * @type {Boolean}
- */
-let ENV_AUTO_INJECT_ENABLED: boolean | undefined = void 0;
+describe("Application Context", () => {
+       it("Can get [Test] class ?", () => {
+              assert.ok(instance?.constructor?.name === "Test");
+       });
 
-/**
- * Checks if the automatic injection @see Injectable is enabled
- *
- * @public
- * @returns {Boolean}
- */
-export const AUTO_INJECT_ENABLED = function (): boolean {
-       if (!ENV_AUTO_INJECT_ENABLED) {
-              /** Default to enabled if undefined */
-              return (ENV_AUTO_INJECT_ENABLED =
-                     env[ENV_GEEKO_AUTO_INJECT] === "0" ? false : true);
-       }
+       it("Can get [Test] encoder ?", () => {
+              assert.ok(instance?.encoder);
+       });
 
-       return ENV_AUTO_INJECT_ENABLED;
-};
+       it("is [Test] JSON encoder ?", () => {
+              assert.ok(instance?.encoder?.constructor?.name === "JsonEncoder");
+       });
+});

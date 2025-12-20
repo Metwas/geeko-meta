@@ -12,7 +12,7 @@
 
      The above Copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
-     
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,7 +31,9 @@ export type CustomTrackDecorator<T> = {
 
 /**
  * Method/Function & Class decorator strong-type
- * 
+ *
  * @public
  */
-export type CustomDecorator<T = string> = MethodDecorator & ClassDecorator & CustomTrackDecorator<T>;
+export type CustomDecorator<T = string> = MethodDecorator &
+       ClassDecorator &
+       CustomTrackDecorator<T>;
