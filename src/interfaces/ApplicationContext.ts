@@ -58,4 +58,17 @@ export class ApplicationContext {
        public get<T>(target: InjectionToken | Type<T>): T | undefined {
               return this.resolver.resolve(target, this.registry);
        }
+
+       /**
+        * Resolves the @see T metadata from the specified @see InjectionToken or @see Type<T>
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} target
+        * @returns {Any | undefined}
+        */
+       public getMetadata<T>(
+              target: InjectionToken | Type<T>,
+       ): any | undefined {
+              return this.resolver.getMetadata(target, this.registry);
+       }
 }

@@ -187,6 +187,26 @@ export class Reflector {
        }
 
        /**
+        * Attempts to resolve the metadata of the given @see Type<T> target
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @returns {Any | undefined}
+        */
+       public static getMetadata<T = new () => void>(
+              token: InjectionToken | Type<T>,
+       ): any | undefined {
+              if (Reflector.ready() === false || !Reflector._registry) {
+                     return void 0;
+              }
+
+              return Reflector._resolver?.getMetadata(
+                     token,
+                     Reflector._registry,
+              );
+       }
+
+       /**
         * Gets all @see ModuleWrapper(s) from the given @see Injectable key
         *
         * @public
