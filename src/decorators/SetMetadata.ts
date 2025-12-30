@@ -71,6 +71,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
 
               const wrapper: ModuleWrapper<any, T> = new ModuleWrapper(
                      target,
+                     metadataValue,
                      options,
               );
               wrapper.injectable = options?.injectable ?? false;

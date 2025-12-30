@@ -206,4 +206,36 @@ export class DefaultResolver implements IResolver {
 
               return module.instance(instance);
        }
+
+       /**
+        * Resolves the metadata of the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @param {IModuleRegistry} registry
+        * @return {Any | undefined}
+        */
+       public getMetadata<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+       ): any | undefined {
+              const name: InjectionToken =
+                     typeof token === "function" ? token?.name : token;
+
+              if (!registry || !name) {
+                     return void 0;
+              }
+
+              const properties: Map<
+                     InjectionToken,
+                     Array<PropertyMap<any>>
+              > = registry.properties();
+
+              const modules: Map<
+                     InjectionToken,
+                     ModuleWrapper<any, T>
+              > = registry.modules();
+
+              return modules.get(name)?.metadata();
+       }
 }

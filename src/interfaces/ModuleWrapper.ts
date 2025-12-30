@@ -44,11 +44,13 @@ export class ModuleWrapper<I, T> {
         */
        public constructor(
               target: Type<T> | undefined,
+              metadata?: any,
               options?: InjectableOptions,
        ) {
               this.useFactory = options?.useFactory;
               this.useValue = options?.useValue;
               this._token = options?.token;
+              this._meta = metadata;
               this._target = target;
        }
 
@@ -67,6 +69,14 @@ export class ModuleWrapper<I, T> {
         * @type {Type<T>}
         */
        private _target: Type<T> | undefined = void 0;
+
+       /**
+        * Module metadata
+        *
+        * @private
+        * @type {Any}
+        */
+       private _meta: any | undefined = void 0;
 
        /**
         * @see this._target instance
@@ -138,5 +148,15 @@ export class ModuleWrapper<I, T> {
         */
        public name(): InjectionToken | undefined {
               return this._token ?? this._target?.name;
+       }
+
+       /**
+        * Gets the @see metadata
+        *
+        * @public
+        * @returns {Any}
+        */
+       public metadata(): any {
+              return this._meta;
        }
 }

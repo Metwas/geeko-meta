@@ -41,9 +41,23 @@ export interface IResolver {
         * @public
         * @param {InjectionToken | Type<T>} token
         * @param {IModuleRegistry} registry
+        * @return {T | undefined}
         */
        resolve<T>(
               token: InjectionToken | Type<T>,
               registry: IModuleRegistry,
        ): T | undefined;
+
+       /**
+        * Resolves the metadata of the given token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @param {IModuleRegistry} registry
+        * @return {Any | undefined}
+        */
+       getMetadata<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+       ): any | undefined;
 }
