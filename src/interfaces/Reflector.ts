@@ -320,7 +320,7 @@ export class Reflector {
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
                             any
-                     >(target, options);
+                     >(target, void 0, options);
 
                      const name: InjectionToken | undefined = wrapper.name();
 
