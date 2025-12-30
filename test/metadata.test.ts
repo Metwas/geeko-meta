@@ -24,31 +24,21 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { MetadataOptions, InjectableOptions } from "../types";
-import { CustomDecorator } from "../types/Decorators";
-import { SetMetadata } from "./SetMetadata";
+import { ApplicationContext, Reflector } from "../src/main";
+import { JsonEncoder, Test } from "./dependancies";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-/**
- * Sets a @see ClassDecorator to injectable.
- *
- * @public
- * @param {MetadataOptions | String} options
- * @returns {CustomDecorator<T>}
- */
-export const Injectable = (
-       options?: string | MetadataOptions | any,
-): CustomDecorator => {
-       let metadata: MetadataOptions = Object.assign(
-              typeof options === "string"
-                     ? { token: options }
-                     : (options ?? {}),
-              {
-                     injectable: true,
-              },
-       );
+const instance: Test | undefined = Reflector.get(Test);
 
-       return SetMetadata(INJECTABLE_TOKEN_KEY, metadata, metadata);
-};
+describe("Metadata", () => {
+       it("Can get Metadata ?", () => {
+              assert.ok(Reflector.getMetadata(Test) !== void 0);
+       });
+
+       it("Metadata is [key] is expected", () => {
+              assert.ok(Reflector.getMetadata(Test)?.key === 420);
+       });
+});

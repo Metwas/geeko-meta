@@ -108,7 +108,7 @@ export class JsonEncoder implements Encoder {
 /**
  * @public
  */
-@Injectable()
+@Injectable({ key: 420 })
 export class Test {
        /**
         * Expects @see Encoder interface - in this case the @see JsonEncoder
