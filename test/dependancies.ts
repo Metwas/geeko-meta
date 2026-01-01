@@ -31,6 +31,7 @@ import {
        InjectableOptions,
        CustomDecorator,
        MetadataOptions,
+       SetPropertyMetadata,
 } from "../src/main";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -42,6 +43,14 @@ import {
  * @type {String}
  */
 export const ENCODER_INJECTABLE_TOKEN: string = "ENCODER_INJECTABLE_TOKEN";
+
+/**
+ * Used to reference a custom GET rest API @see SetMetadata injector token
+ *
+ * @public
+ * @type {String}
+ */
+export const GET_INJECTABLE_TOKEN: string = "GET_INJECTABLE_TOKEN";
 
 /**
  * @public
@@ -70,7 +79,18 @@ export const Encoding = (
               },
        );
 
-       return SetMetadata(ENCODER_INJECTABLE_TOKEN, true, metadata);
+       return SetMetadata(ENCODER_INJECTABLE_TOKEN, metadata, metadata);
+};
+
+/**
+ * Custom @see Get Rest decorator
+ *
+ * @public
+ * @param {String} path
+ * @returns {PropertyDecorator<T>}
+ */
+export const Get = (path: string): PropertyDecorator => {
+       return SetPropertyMetadata(GET_INJECTABLE_TOKEN, { path: path }, void 0);
 };
 
 /**
@@ -80,11 +100,11 @@ export const Encoding = (
  */
 @Encoding("hex")
 export class HexEncoder implements Encoder {
-       encode(value: any): string {
+       public encode(value: any): string {
               return "0x00";
        }
 
-       decode(value: string): any {
+       public decode(value: string): any {
               return "0x01";
        }
 }
@@ -96,11 +116,11 @@ export class HexEncoder implements Encoder {
  */
 @Injectable("JSON_ENCODER")
 export class JsonEncoder implements Encoder {
-       encode(value: any): string {
+       public encode(value: any): string {
               return JSON.stringify(value);
        }
 
-       decode(value: string): any {
+       public decode(value: string): any {
               return JSON.parse(value);
        }
 }
@@ -117,4 +137,12 @@ export class Test {
         * @param {Encoder} encoder
         */
        public constructor(@Inject("JSON_ENCODER") public encoder: Encoder) {}
+
+       /**
+        * API get request example
+        */
+       @Get("/test")
+       public get() {
+              return "GET Request";
+       }
 }

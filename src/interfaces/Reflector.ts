@@ -38,6 +38,7 @@ import { DefaultResolver } from "./resolvers/DefaultResolver";
 import { IModuleRegistry } from "./registry/IModuleRegistry";
 import { ModuleRegistry } from "./registry/ModuleRegistry";
 import { ApplicationContext } from "./ApplicationContext";
+import { ReflectOptions } from "../types/ReflectOptions";
 import { LogLevel, LogService } from "@geeko/log";
 import { IResolver } from "./resolvers/IResolver";
 import { ModuleWrapper } from "./ModuleWrapper";
@@ -157,16 +158,23 @@ export class Reflector {
                      | Map<InjectionToken, Array<PropertyMap<any>>>
                      | undefined = Reflector._registry?.properties();
 
-              const name: string = property.target.name;
-              const existing: Array<PropertyMap<T>> | undefined =
-                     properties?.get(name);
-
-              if (!existing) {
-                     properties?.set(name, [property]);
+              if (!properties) {
                      return void 0;
               }
 
+              const name: string = property.target.name;
+              let existing: Array<PropertyMap<T>> | undefined =
+                     properties?.get(name);
+
+              if (!existing) {
+                     existing = [property];
+                     properties?.set(name, existing);
+
+                     return Reflector._storePropertyToken(properties, property);
+              }
+
               existing.push(property);
+              return Reflector._storePropertyToken(properties, property);
        }
 
        /**
@@ -211,9 +219,32 @@ export class Reflector {
         *
         * @public
         * @param {InjectionToken} key
+        * @param {ReflectOptions} options
         * @returns {Array<unknown> | undefined}
         */
-       public static getFor(key: InjectionToken): Array<unknown> | undefined {
+       public static getFor(
+              key: InjectionToken,
+              options?: ReflectOptions,
+       ): Array<unknown> | undefined {
+              if (options?.isProperty) {
+                     const properties:
+                            | Map<InjectionToken, PropertyMap<any>[]>
+                            | undefined = Reflector._registry?.properties();
+
+                     if (!properties || properties.size === 0) {
+                            return void 0;
+                     }
+
+                     const property: Array<PropertyMap<any>> | undefined =
+                            properties.get(key);
+
+                     if (!property) {
+                            return void 0;
+                     }
+
+                     return property;
+              }
+
               const injectables:
                      | Map<InjectionToken, Array<InjectionToken>>
                      | undefined = Reflector._registry?.injectables();
@@ -320,7 +351,7 @@ export class Reflector {
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
                             any
-                     >(target, void 0, options);
+                     >(target, options?.metadata, options);
 
                      const name: InjectionToken | undefined = wrapper.name();
 
@@ -418,5 +449,28 @@ export class Reflector {
               }
 
               return Reflector._registry;
+       }
+
+       /**
+        * Helper for storing @see PropertyMap based on the @see InjectionToken
+        *
+        * @private
+        * @param { Map<InjectionToken, Array<PropertyMap<any>>>} properties
+        * @param {PropertyMap<T>} property
+        */
+       private static _storePropertyToken<T>(
+              properties: Map<InjectionToken, Array<PropertyMap<any>>>,
+              property: PropertyMap<T>,
+       ): void {
+              if (properties?.has(property.token) === false) {
+                     /** Store global token reference */
+                     properties.set(property.token, [property]);
+              } else {
+                     const existing: Array<PropertyMap<T>> | undefined =
+                            properties.get(property.token) ?? [];
+
+                     existing.push(property);
+                     properties.set(property.token, existing);
+              }
        }
 }

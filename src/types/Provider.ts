@@ -44,6 +44,7 @@ export type InjectableOptions = {
        inject?: Array<Type<any> | InjectionToken>;
        useFactory?: (...args: Array<any>) => any;
        token?: InjectionToken;
+       metadata?: any;
        useValue?: any;
 };
 

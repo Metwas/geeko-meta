@@ -74,6 +74,7 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
                      metadataValue,
                      options,
               );
+
               wrapper.injectable = options?.injectable ?? false;
 
               if (options?.useValue) {
@@ -87,4 +88,50 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
 
        factory.KEY = metadataKey;
        return factory;
+};
+
+/**
+ * Sets metadata on a given property, parameter OR class function.
+ *
+ * @public
+ * @param {InjectionToken} token
+ * @param {Any} metadata
+ * @param {MetadataOptions} options
+ * @returns {PropertyDecorator & ParameterDecorator}
+ */
+export const SetPropertyMetadata = <K extends InjectionToken, V = any>(
+       token: K,
+       metadata?: V,
+       options?: MetadataOptions,
+): PropertyDecorator & ParameterDecorator => {
+       /**
+        * @param {Object} target
+        * @param {String} key
+        * @param {Number} index
+        */
+       return (
+              target: object,
+              key: string | symbol | undefined,
+              index?: number,
+       ): void => {
+              if (typeof index !== "number" && key) {
+                     const type: any = target?.constructor;
+                     /** Method parameter */
+                     Reflector.registryProperty({
+                            metadata: metadata,
+                            target: type,
+                            token: token,
+                            key: key,
+                     });
+
+                     return void 0;
+              }
+
+              Reflector.registryProperty({
+                     target: target as any,
+                     metadata: metadata,
+                     token: token,
+                     index: index,
+              });
+       };
 };

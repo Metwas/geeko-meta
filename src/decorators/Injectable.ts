@@ -25,9 +25,9 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { INJECTABLE_TOKEN_KEY } from "../global/injection/inject.tokens";
-import { MetadataOptions, InjectableOptions } from "../types";
 import { CustomDecorator } from "../types/Decorators";
 import { SetMetadata } from "./SetMetadata";
+import { MetadataOptions } from "../types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 

@@ -31,8 +31,6 @@ import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const instance: Test | undefined = Reflector.get(Test);
-
 describe("Metadata", () => {
        it("Can get Metadata ?", () => {
               assert.ok(Reflector.getMetadata(Test) !== void 0);

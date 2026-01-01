@@ -59,7 +59,9 @@ export class DefaultResolver implements IResolver {
               options?: ResolverOptions,
        ): T | undefined {
               const name: InjectionToken =
-                     typeof token === "function" ? token?.name : token;
+                     typeof (token as any)?.name === "string"
+                            ? (token as any).name
+                            : token;
 
               if (!registry || !name) {
                      return void 0;
@@ -220,7 +222,9 @@ export class DefaultResolver implements IResolver {
               registry: IModuleRegistry,
        ): any | undefined {
               const name: InjectionToken =
-                     typeof token === "function" ? token?.name : token;
+                     typeof (token as any)?.name === "string"
+                            ? (token as any).name
+                            : token;
 
               if (!registry || !name) {
                      return void 0;

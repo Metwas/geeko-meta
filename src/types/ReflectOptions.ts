@@ -22,22 +22,11 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import { SetPropertyMetadata } from "./SetMetadata";
-import { InjectionToken } from "../types/Provider";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
 /**
- * Injects property or method parameter metadata
+ * @see Reflector query/scan options
  *
  * @public
- * @param {InjectionToken} token
- * @returns {PropertyDecorator & ParameterDecorator}
  */
-export const Inject = (
-       token: InjectionToken,
-): PropertyDecorator & ParameterDecorator => {
-       return SetPropertyMetadata(token);
+export type ReflectOptions = {
+       isProperty?: boolean;
 };
