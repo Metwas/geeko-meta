@@ -235,14 +235,14 @@ export class Reflector {
                             return void 0;
                      }
 
-                     const property: Array<PropertyMap<any>> | undefined =
+                     const injectables: Array<PropertyMap<any>> | undefined =
                             properties.get(key);
 
-                     if (!property) {
+                     if (!injectables) {
                             return void 0;
                      }
 
-                     return property;
+                     return injectables;
               }
 
               const injectables:

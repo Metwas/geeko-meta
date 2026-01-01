@@ -230,11 +230,6 @@ export class DefaultResolver implements IResolver {
                      return void 0;
               }
 
-              const properties: Map<
-                     InjectionToken,
-                     Array<PropertyMap<any>>
-              > = registry.properties();
-
               const modules: Map<
                      InjectionToken,
                      ModuleWrapper<any, T>
