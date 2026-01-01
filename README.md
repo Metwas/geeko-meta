@@ -13,6 +13,7 @@
 - [Create Application Context](#Application-Context)
 - [Custom Injectables](#Custom-Injectables)
 - [Get Specific Injectables](#Get-Specific-Injectables)
+- [Get Metadata](#Get-Metadata)
 - [Installation](#Installation)
 #
 #
@@ -151,7 +152,7 @@ const injectables: Array<any> | undefined = Reflector.getFor(GET_INJECTABLE_TOKE
 
 The response will look like the following:
 
-```json
+```javascript
 [
   {
     metadata: { path: '/test' },
