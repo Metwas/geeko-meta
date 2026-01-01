@@ -141,7 +141,7 @@ import { Reflector } from '@geeko/meta';
 const injectables: Array<any> = Reflector.getFor(ENCODER_INJECTABLE_TOKEN);
 ```
 
-OR if the injectable is a function or member of a class
+If the injectable is a function or member of a class
 
 ```typescript
 const injectables: Array<any> | undefined = Reflector.getFor(GET_INJECTABLE_TOKEN, {
@@ -151,7 +151,7 @@ const injectables: Array<any> | undefined = Reflector.getFor(GET_INJECTABLE_TOKE
 
 The response will look like the following:
 
-```JSON
+```json
 [
   {
     metadata: { path: '/test' },
@@ -165,7 +165,7 @@ The response will look like the following:
 #
 ### Get Metadata
 
-Below code will fetch the raw metadata if any passed to the [Injectable] decorator for the [Test] class example as seen below:
+Below code will fetch the raw metadata passed to the **@Injectable** decorator for the **Test** class example as seen below:
 ```typescript
 const metadata: any = Reflector.getMetadata(Test);
 ````
