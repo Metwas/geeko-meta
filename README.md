@@ -140,6 +140,35 @@ import { Reflector } from '@geeko/meta';
 
 const injectables: Array<any> = Reflector.getFor(ENCODER_INJECTABLE_TOKEN);
 ```
+
+OR if the injectable is a function or member of a class
+
+```typescript
+const injectables: Array<any> | undefined = Reflector.getFor(GET_INJECTABLE_TOKEN, {
+       isProperty: true,
+});
+````
+
+The response will look like the following:
+
+```JSON
+[
+  {
+    metadata: { path: '/test' },
+    target: [class Test],
+    token: 'GET_INJECTABLE_TOKEN',
+    key: 'get'
+  }
+]
+```
+#
+#
+### Get Metadata
+
+Below code will fetch the raw metadata if any passed to the [Injectable] decorator for the [Test] class example as seen below:
+```typescript
+const metadata: any = Reflector.getMetadata(Test);
+````
 #
 #
 **Note:** By default the resolver will automatically collect metadata ready for injection on startup, however, if you wish to only use the 'createApplicationContext' method, you can disable the automatic resolver by setting the following process environment variable **GEEKO_AUTO_INJECT**  to **0**, e.g:
