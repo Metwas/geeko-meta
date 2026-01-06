@@ -75,8 +75,6 @@ export const SetMetadata = <K = string | InjectionToken, V = any>(
                      options,
               );
 
-              wrapper.injectable = options?.injectable ?? false;
-
               if (options?.useValue) {
                      wrapper.useValue = options?.useValue;
               } else if (typeof options?.useFactory === "function") {

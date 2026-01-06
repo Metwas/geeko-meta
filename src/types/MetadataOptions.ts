@@ -34,5 +34,6 @@ import { InjectableOptions } from "./Provider";
  * @public
  */
 export type MetadataOptions = InjectableOptions & {
+       metadataOnly?: boolean;
        injectable?: boolean;
 };

@@ -25,13 +25,13 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import {
+       SetPropertyMetadata,
+       InjectableOptions,
+       MetadataOptions,
+       CustomDecorator,
        SetMetadata,
        Injectable,
        Inject,
-       InjectableOptions,
-       CustomDecorator,
-       MetadataOptions,
-       SetPropertyMetadata,
 } from "../src/main";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
