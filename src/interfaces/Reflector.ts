@@ -369,7 +369,8 @@ export class Reflector {
                             target = provider as Type<any>;
                      }
 
-                     options && (options.injectable = true);
+                     options = options ?? {};
+                     options.injectable = true;
 
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
