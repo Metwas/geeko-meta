@@ -80,7 +80,7 @@ export class DefaultResolver implements IResolver {
               const module: ModuleWrapper<any, T> | undefined =
                      modules.get(name);
 
-              if (!module || module.injectable === false) {
+              if (!module || module.injectable() === false) {
                      return void 0;
               }
 
@@ -207,6 +207,30 @@ export class DefaultResolver implements IResolver {
               }
 
               return module.instance(instance);
+       }
+
+       /**
+        * Gets the @see ModuleWrapper specified by token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @param {IModuleRegistry} registry
+        * @returns {ModuleWrapper<any, T> | undefined}
+        */
+       public getWrapper<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+       ): ModuleWrapper<any, T> | undefined {
+              const name: InjectionToken =
+                     typeof (token as any)?.name === "string"
+                            ? (token as any).name
+                            : token;
+
+              if (!registry || !name) {
+                     return void 0;
+              }
+
+              return registry.modules().get(name);
        }
 
        /**

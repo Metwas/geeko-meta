@@ -27,6 +27,7 @@
 import {
        InjectableOptions,
        InjectionToken,
+       MetadataOptions,
        ModuleContext,
        PropertyMap,
        Provider,
@@ -128,7 +129,7 @@ export class Reflector {
                      return void 0;
               }
 
-              if (wrapper.injectable === true) {
+              if (wrapper.injectable() || wrapper.metadataOnly()) {
                      if (isArray === false) {
                             injectables?.set(key, [name]);
                      } else if (existing) {
@@ -209,6 +210,26 @@ export class Reflector {
               }
 
               return Reflector._resolver?.getMetadata(
+                     token,
+                     Reflector._registry,
+              );
+       }
+
+       /**
+        * Gets the @see ModuleWrapper specified by token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @returns {ModuleWrapper<any, T> | undefined}
+        */
+       public static getWrapper<T>(
+              token: InjectionToken | Type<T>,
+       ): ModuleWrapper<any, T> | undefined {
+              if (Reflector.ready() === false || !Reflector._registry) {
+                     return void 0;
+              }
+
+              return Reflector._resolver?.getWrapper(
                      token,
                      Reflector._registry,
               );
@@ -330,7 +351,7 @@ export class Reflector {
 
               for (; index < length; ++index) {
                      const provider: Provider<any> = providers[index];
-                     let options: InjectableOptions | undefined = void 0;
+                     let options: MetadataOptions | undefined = void 0;
                      let target: Type<any> | undefined = void 0;
 
                      if (
@@ -348,6 +369,9 @@ export class Reflector {
                             target = provider as Type<any>;
                      }
 
+                     options = options ?? {};
+                     options.injectable = true;
+
                      const wrapper: ModuleWrapper<any, any> = new ModuleWrapper<
                             any,
                             any
@@ -363,7 +387,6 @@ export class Reflector {
                             continue;
                      }
 
-                     wrapper.injectable = true;
                      modules.set(name, wrapper);
               }
 

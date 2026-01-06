@@ -46,8 +46,6 @@ describe(`Can get all Injectables for token [${ENCODER_INJECTABLE_TOKEN}]`, () =
 });
 
 describe(`Can get all Injectables for token [${GET_INJECTABLE_TOKEN}]`, () => {
-       console.log("=======================");
-       console.log(getters);
        it("Should at least be one ?", () => {
               assert.ok(getters && getters.length > 0);
        });

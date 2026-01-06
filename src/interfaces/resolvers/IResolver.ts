@@ -26,6 +26,7 @@
 
 import { IModuleRegistry } from "../registry/IModuleRegistry";
 import { InjectionToken, Type } from "../../types";
+import { ModuleWrapper } from "../ModuleWrapper";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -60,4 +61,17 @@ export interface IResolver {
               token: InjectionToken | Type<T>,
               registry: IModuleRegistry,
        ): any | undefined;
+
+       /**
+        * Gets the @see ModuleWrapper specified by token @see InjectionToken OR @see Type<T> from the configured @see IModuleRegistry
+        *
+        * @public
+        * @param {InjectionToken | Type<T>} token
+        * @param {IModuleRegistry} registry
+        * @returns {ModuleWrapper<any, T> | undefined}
+        */
+       getWrapper<T>(
+              token: InjectionToken | Type<T>,
+              registry: IModuleRegistry,
+       ): ModuleWrapper<any, T> | undefined;
 }

@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken } from "../types";
+import { InjectableOptions, InjectionToken, MetadataOptions } from "../types";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -45,8 +45,11 @@ export class ModuleWrapper<I, T> {
        public constructor(
               target: Type<T> | undefined,
               metadata?: any,
-              options?: InjectableOptions,
+              options?: MetadataOptions,
        ) {
+              this._metaOnly = options?.metadataOnly ?? false;
+              this._injectable = options?.injectable ?? false;
+
               this.useFactory = options?.useFactory;
               this.useValue = options?.useValue;
               this._token = options?.token;
@@ -87,6 +90,22 @@ export class ModuleWrapper<I, T> {
        private _instance: I | undefined = void 0;
 
        /**
+        * @see injectable flag
+        *
+        * @private
+        * @type {Boolean}
+        */
+       private _injectable: boolean = false;
+
+       /**
+        * @see metadata use only flag
+        *
+        * @private
+        * @type {I}
+        */
+       private _metaOnly: boolean = false;
+
+       /**
         * Get/Set the @see Type<T> instance value. This takes priority over @see useFactory
         *
         * @public
@@ -108,7 +127,19 @@ export class ModuleWrapper<I, T> {
         * @public
         * @type {Boolean}
         */
-       public injectable: boolean = false;
+       public injectable(): boolean {
+              return this._injectable;
+       }
+
+       /**
+        * Flag to indicate if this module is for metadata use only
+        *
+        * @public
+        * @type {Boolean}
+        */
+       public metadataOnly(): boolean {
+              return this._metaOnly;
+       }
 
        /**
         * Get/Set the target @see Type<T> instance value
