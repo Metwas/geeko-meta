@@ -129,7 +129,7 @@ export class Reflector {
                      return void 0;
               }
 
-              if (wrapper.injectable() || wrapper.metadataOnly()) {
+              if (wrapper.injectable()) {
                      if (isArray === false) {
                             injectables?.set(key, [name]);
                      } else if (existing) {
@@ -237,6 +237,61 @@ export class Reflector {
 
        /**
         * Gets all @see ModuleWrapper(s) from the given @see Injectable key
+        *
+        * @public
+        * @param {InjectionToken} key
+        * @returns {Array<ModuleWrapper<any, any>> | undefined}
+        */
+       public static getWrapperFor(
+              key: InjectionToken,
+       ): Array<ModuleWrapper<any, any>> | undefined {
+              if (Reflector.ready() === false || !Reflector._registry) {
+                     return void 0;
+              }
+
+              const injectables:
+                     | Map<InjectionToken, Array<InjectionToken>>
+                     | undefined = Reflector._registry?.injectables();
+
+              if (injectables && injectables.has(key)) {
+                     const tokens: Array<InjectionToken> | undefined =
+                            injectables.get(key);
+
+                     if (!tokens) {
+                            return void 0;
+                     }
+
+                     const targets: Array<ModuleWrapper<any, any>> = [];
+
+                     const length: number = tokens.length;
+                     let index: number = 0;
+
+                     for (; index < length; ++index) {
+                            const token: InjectionToken = tokens[index];
+
+                            if (!key) {
+                                   continue;
+                            }
+
+                            const wrapper: ModuleWrapper<any, any> | undefined =
+                                   Reflector._resolver?.getWrapper(
+                                          token,
+                                          Reflector._registry,
+                                   );
+
+                            if (wrapper) {
+                                   targets.push(wrapper);
+                            }
+                     }
+
+                     return targets;
+              }
+
+              return void 0;
+       }
+
+       /**
+        * Gets all @see Types<T> from the given @see Injectable key
         *
         * @public
         * @param {InjectionToken} key
