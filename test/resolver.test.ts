@@ -24,16 +24,24 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { ModuleWrapper, Reflector } from "../src/main";
 import { describe, it } from "node:test";
-import { Reflector } from "../src/main";
 import assert from "node:assert/strict";
 import { Test } from "./dependancies";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const instance: Test | undefined = Reflector.get(Test);
+describe("Can get wrapper [Test]", () => {
+       const wrapper: ModuleWrapper<any, Test> | undefined =
+              Reflector.getWrapper(Test);
+       it("Wrapper target OK ?", () => {
+              assert.ok(wrapper?.target()?.name === "Test");
+       });
+});
 
-describe("Auto inject for [TestClass]", () => {
+describe("Auto inject for [Test]", () => {
+       const instance: Test | undefined = Reflector.get(Test);
+
        it("Instance OK ?", () => {
               assert.ok(instance?.constructor.name === "Test");
        });
