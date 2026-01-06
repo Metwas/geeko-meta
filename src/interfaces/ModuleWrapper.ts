@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { InjectableOptions, InjectionToken, MetadataOptions } from "../types";
+import { InjectionToken, MetadataOptions } from "../types";
 import { Type } from "../types/Type";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -47,7 +47,6 @@ export class ModuleWrapper<I, T> {
               metadata?: any,
               options?: MetadataOptions,
        ) {
-              this._metaOnly = options?.metadataOnly ?? false;
               this._injectable = options?.injectable ?? false;
 
               this.useFactory = options?.useFactory;
@@ -98,14 +97,6 @@ export class ModuleWrapper<I, T> {
        private _injectable: boolean = false;
 
        /**
-        * @see metadata use only flag
-        *
-        * @private
-        * @type {I}
-        */
-       private _metaOnly: boolean = false;
-
-       /**
         * Get/Set the @see Type<T> instance value. This takes priority over @see useFactory
         *
         * @public
@@ -129,16 +120,6 @@ export class ModuleWrapper<I, T> {
         */
        public injectable(): boolean {
               return this._injectable;
-       }
-
-       /**
-        * Flag to indicate if this module is for metadata use only
-        *
-        * @public
-        * @type {Boolean}
-        */
-       public metadataOnly(): boolean {
-              return this._metaOnly;
        }
 
        /**

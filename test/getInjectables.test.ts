@@ -26,27 +26,39 @@
 
 import { ENCODER_INJECTABLE_TOKEN, GET_INJECTABLE_TOKEN } from "./dependancies";
 import { describe, it } from "node:test";
-import { Reflector } from "../src/main";
+import { ModuleWrapper, Reflector } from "../src/main";
 import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const injectables: Array<any> | undefined = Reflector.getFor(
-       ENCODER_INJECTABLE_TOKEN,
-);
-
-const getters: Array<any> | undefined = Reflector.getFor(GET_INJECTABLE_TOKEN, {
-       isProperty: true,
-});
-
 describe(`Can get all Injectables for token [${ENCODER_INJECTABLE_TOKEN}]`, () => {
+       const injectables: Array<any> | undefined = Reflector.getFor(
+              ENCODER_INJECTABLE_TOKEN,
+       );
+
        it("Should at least be one ?", () => {
               assert.ok(injectables && injectables.length > 0);
        });
 });
 
 describe(`Can get all Injectables for token [${GET_INJECTABLE_TOKEN}]`, () => {
+       const getters: Array<any> | undefined = Reflector.getFor(
+              GET_INJECTABLE_TOKEN,
+              {
+                     isProperty: true,
+              },
+       );
+
        it("Should at least be one ?", () => {
               assert.ok(getters && getters.length > 0);
+       });
+});
+
+describe(`Can get all ModuleWrappers for token [${ENCODER_INJECTABLE_TOKEN}]`, () => {
+       const modules: Array<ModuleWrapper<any, any>> | undefined =
+              Reflector.getWrapperFor(ENCODER_INJECTABLE_TOKEN);
+
+       it("Should at least be one ?", () => {
+              assert.ok(modules && modules.length > 0);
        });
 });
