@@ -10,7 +10,7 @@
               "test": "npm run test:tsc && node --test ./.ts-cache/**/*.test.js"
        },
        "author": "Metwas",
-       "license": "MIT",
+       "license": "GPL-2.0-only",
        "repository": {
               "url": "https://github.com/Metwas/geeko-meta.git"
        },
