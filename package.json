@@ -15,11 +15,11 @@
               "url": "https://github.com/Metwas/geeko-meta.git"
        },
        "dependencies": {
-              "@geeko/log": "^1.1.0",
+              "@geeko/log": "^1.3.2",
               "reflect-metadata": "^0.2.2"
        },
        "devDependencies": {
-              "@types/node": "^24.10.4",
+              "@types/node": "^24.10.13",
               "typescript": "^5.9.3"
        }
 }
