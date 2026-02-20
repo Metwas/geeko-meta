@@ -27,7 +27,6 @@ import {
        Type,
 } from "../types";
 
-import { GEEKO_META_LOGGER_LEVEL } from "../global/environment";
 import { DefaultResolver } from "./resolvers/DefaultResolver";
 import { IModuleRegistry } from "./registry/IModuleRegistry";
 import { ModuleRegistry } from "./registry/ModuleRegistry";
