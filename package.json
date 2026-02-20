@@ -1,6 +1,6 @@
 {
        "name": "@geeko/meta",
-       "version": "1.4.1",
+       "version": "1.4.3",
        "description": "Geeko metadata library for decorators & dependency injection",
        "main": "./dist/main.js",
        "scripts": {
