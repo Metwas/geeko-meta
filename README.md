@@ -176,7 +176,6 @@ const metadata: any = Reflector.getMetadata(Test);
 ```sh
  set GEEKO_AUTO_INJECT 0 node ./app.js
 ```
-Logging can also be disabled by setting the process environment variable **GEEKO_META_LOGGER_LEVEL** to **0**
 #
 #
 ## Installation
