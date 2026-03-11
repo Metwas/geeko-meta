@@ -452,25 +452,9 @@ export class Reflector {
                             return true;
                      }
 
-                     Reflector._ready = true;
-
                      if (!Reflector._log) {
-                            let argv: Array<string> = process.argv;
-                            let level: LogLevel;
-
-                            if (argv.indexOf("--debug") > -1) {
-                                   level = "debug";
-                            } else if (argv.indexOf("--info") > -1) {
-                                   level = "info";
-                            } else if (argv.indexOf("--verbose") > -1) {
-                                   level = "verbose";
-                            } else {
-                                   level = "quiet";
-                            }
-
                             Reflector._log = new LogService({
                                    title: "Reflect",
-                                   level: level,
                             });
                      }
 
@@ -482,7 +466,7 @@ export class Reflector {
                             Reflector.resolver(new DefaultResolver(this._log));
                      }
 
-                     return true;
+                     return (Reflector._ready = true);
               } catch (error) {
                      return false;
               }
