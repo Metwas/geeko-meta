@@ -18,8 +18,8 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ENCODER_INJECTABLE_TOKEN, GET_INJECTABLE_TOKEN } from "./dependancies";
-import { describe, it } from "node:test";
 import { ModuleWrapper, Reflector } from "../src/main";
+import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
